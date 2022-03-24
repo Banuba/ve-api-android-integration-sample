@@ -6,6 +6,7 @@
     + [FAR Camera](#FAR-Camera)
     + [Playback API](#Playback-API)
     + [Export API](#Export-API)
+    + [Core API](#Core-API)
 - [Requirements](#Requirements)
 - [Starting a free trial](#Starting-a-free-trial)
 - [Token](#Token)
@@ -26,7 +27,7 @@ Camera is representation of BanubaSDK and BanubaEffectPlayer. All relevant infor
 ```ve-playback-sdk``` module contains interfaces and classes for managing video playback with applied music, visual and time effects.
 
 [API reference](https://github.com/Banuba/ve-sdk-android-playback-sample/blob/master/mddocs/index.md)\
-[Playback Sample](https://github.com/Banuba/ve-sdk-android-playback-sample)
+[Playback Sample](https://github.com/Banuba/ve-sdk-android-playback-sample/blob/master/mddocs/playback/index.md)
 
 ### Export API
 
@@ -35,6 +36,11 @@ Camera is representation of BanubaSDK and BanubaEffectPlayer. All relevant infor
 [API Reference](https://github.com/Banuba/ve-sdk-android-export-sample/blob/master/mddocs/index.md)\
 [Export Sample](https://github.com/Banuba/ve-sdk-android-export-sample)
 
+### Core API
+
+```banuba-token-storage-sdk``` module providing the functionality of receiving and decoding token.
+
+[API reference](https://github.com/Banuba/ve-sdk-android-playback-sample/blob/master/mddocs/tokenStorage/index.md)
 
 ## Requirements
 This is what you need to run the Export API
