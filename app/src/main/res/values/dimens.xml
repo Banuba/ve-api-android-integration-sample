@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="camera_action_button_height">28dp</dimen>
+    <dimen name="camera_action_button_width">28dp</dimen>
+    <dimen name="editor_action_button_width">28dp</dimen>
+    <dimen name="editor_action_button_height">28dp</dimen>
+</resources>

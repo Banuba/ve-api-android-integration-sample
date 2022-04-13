@@ -1,3 +1,87 @@
 [![](https://www.banuba.com/hubfs/Banuba_November2018/Images/Banuba%20SDK.png)](https://www.banuba.com/video-editor-sdk)
 
 # Video Editor SDK. VE API Integration sample for Android.
+
+- [API Reference](#API-Reference)
+    + [FAR Camera](#FAR-Camera)
+    + [Playback API](#Playback-API)
+    + [Export API](#Export-API)
+    + [Core API](#Core-API)
+- [Requirements](#Requirements)
+- [Starting a free trial](#Starting-a-free-trial)
+- [Token](#Token)
+- [Getting Started](#Getting-Started)
+    + [Add dependencies](#Add-dependencies)
+
+Sample is a basic integration of VE API. Navigation flow consists of camera, editor, gallery screens with Facade API entities, funcs implementations.
+
+See how to use basic screen settings with the API Entites. All of API referencies you could find out here:
+
+## API Reference
+### FAR Camera
+
+Camera is representation of BanubaSDK and BanubaEffectPlayer. All relevant information and docs is [here](https://docs.banuba.com/face-ar-sdk-v1/android/android_overview).
+
+### Playback API
+
+```ve-playback-sdk``` module contains interfaces and classes for managing video playback with applied music, visual and time effects.
+
+[API reference](https://github.com/Banuba/ve-sdk-android-playback-sample/blob/master/mddocs/index.md)\
+[Playback Sample](https://github.com/Banuba/ve-sdk-android-playback-sample/blob/master/mddocs/playback/index.md)
+
+### Export API
+
+```ve-export-sdk``` module contains interfaces and classes for handling and configuring export process.
+
+[API Reference](https://github.com/Banuba/ve-sdk-android-export-sample/blob/master/mddocs/index.md)\
+[Export Sample](https://github.com/Banuba/ve-sdk-android-export-sample)
+
+### Core API
+
+```banuba-token-storage-sdk``` module providing the functionality of receiving and decoding token.
+
+[API reference](https://github.com/Banuba/ve-sdk-android-playback-sample/blob/master/mddocs/tokenStorage/index.md)
+
+## Requirements
+This is what you need to run the Export API
+- Java 1.8+
+- Kotlin 1.4+
+- Android Studio 4+
+- Android OS 6.0 or higher
+- OpenGL ES 3.0  
+
+## Starting a free trial
+
+You should start with getting a trial token. It will grant you **14 days** to freely play around with the AI Video Editor SDK and test its entire functionality the way you see fit.
+
+There is nothing complicated about it - [contact us](https://www.banuba.com/video-editor-sdk) or send an email to sales@banuba.com and we will send it to you. We can also send you a sample app so you can see how it works “under the hood”.
+
+
+## Token
+We offer а free 14-days trial for you could thoroughly test and assess Export API functionality in your app. To get access to your trial, please, get in touch with us by [filling a form](https://www.banuba.com/video-editor-sdk) on our website. Our sales managers will send you the trial token.
+
+Banuba token should be put [here](https://github.com/Banuba/ve-sdk-android-export-sample/blob/ae48357eace151e99da3d5ee9be125858663311f/app/src/main/res/values/strings.xml#L6).
+
+## Getting Started
+### Add dependencies
+Please, specify a list of dependencies as in [app/build.gradle](app/build.gradle) file to integrate export functionality of Export API.
+
+``` groovy
+def banubaSdkVersion = '1.22.0'
+implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
+implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
+implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
+implementation "com.banuba.sdk:ve-playback-sdk:${banubaSdkVersion}"
+implementation "com.banuba.sdk:ve-export-sdk:${banubaSdkVersion}"
+implementation "com.banuba.sdk:ve-effects-sdk:${banubaSdkVersion}"
+
+implementation 'com.banuba.sdk:effect-player:0.38.1'
+```
+
+Also create **libs** directory in your project and add `banuba_sdk-release.aar`. Then open build.gradle (Module: app) and add Banuba SDK dependencies for your project:
+
+``` groovy
+// Banuba Face AR SDK dependencies
+implementation fileTree(dir: '../libs', include: ['*.aar'])
+```
+
