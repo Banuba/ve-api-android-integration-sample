@@ -26,8 +26,8 @@ Camera is representation of BanubaSDK and BanubaEffectPlayer. All relevant infor
 
 ```ve-playback-sdk``` module contains interfaces and classes for managing video playback with applied music, visual and time effects.
 
-[API reference](https://github.com/Banuba/ve-sdk-android-playback-sample/blob/master/mddocs/index.md)\
-[Playback Sample](https://github.com/Banuba/ve-sdk-android-playback-sample/blob/master/mddocs/playback/index.md)
+[API reference](https://github.com/Banuba/ve-sdk-android-playback-sample/blob/master/mddocs/playback/index.md)\
+[Playback Sample](https://github.com/Banuba/ve-sdk-android-playback-sample)
 
 ### Export API
 
