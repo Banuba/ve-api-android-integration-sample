@@ -8,6 +8,7 @@
     + [Export API](#Export-API)
     + [Core API](#Core-API)
 - [Requirements](#Requirements)
+- [VE API size](#ve-api-size)
 - [Starting a free trial](#Starting-a-free-trial)
 - [Token](#Token)
 - [Getting Started](#Getting-Started)
@@ -49,6 +50,12 @@ This is what you need to run the Export API
 - Android Studio 4+
 - Android OS 6.0 or higher
 - OpenGL ES 3.0  
+
+## VE API size
+
+| Options | Mb      | Note |
+| -------- | --------- | ----- |
+| VE API  | 38.1 | AR effect sizes are not included. AR effect takes 1-3 MB in average.
 
 ## Starting a free trial
 
