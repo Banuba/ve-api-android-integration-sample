@@ -26,13 +26,13 @@ import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.manager.IEventCallback
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
-import com.banuba.sdk.token.storage.CoroutineDispatcherProvider
 import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
 import com.banuba.sdk.token.storage.license.EditorLicenseManager
 import com.banuba.sdk.token.storage.provider.TokenProvider
 import com.banuba.sdk.types.Data
 import com.banuba.sdk.ve.di.VeSdkKoinModule
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
@@ -337,7 +337,7 @@ class CameraActivity : AppCompatActivity() {
             VePlaybackSdkKoinModule().module
         )
         loadKoinModules(videoEditorKoinModules)
-        CoroutineScope(CoroutineDispatcherProvider.Immediate).launch {
+        CoroutineScope(Dispatchers.Main.immediate).launch {
             EditorLicenseManager.initialize(tokenProvider.getToken())
         }
     }

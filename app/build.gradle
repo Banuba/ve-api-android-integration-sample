@@ -42,7 +42,7 @@ dependencies {
     // Banuba Face AR SDK dependencies
     implementation fileTree(dir: '../libs', include: ['*.aar'])
 
-    def banubaSdkVersion = '1.22.2'
+    def banubaSdkVersion = '1.23.0'
     implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
