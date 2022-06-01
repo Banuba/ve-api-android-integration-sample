@@ -6,15 +6,15 @@ import com.banuba.example.videoeditor.R
 import com.banuba.example.videoeditor.editor.EditorViewModel
 import com.banuba.example.videoeditor.export.CustomExportParamsProvider
 import com.banuba.example.videoeditor.export.CustomPublishManager
+import com.banuba.example.videoeditor.export.EnableExportAudioProvider
 import com.banuba.example.videoeditor.export.StubImageLoader
 import com.banuba.sdk.core.domain.ImageLoader
-import com.banuba.sdk.core.media.DurationExtractor
 import com.banuba.sdk.export.data.ExportFlowManager
 import com.banuba.sdk.export.data.ExportParamsProvider
 import com.banuba.sdk.export.data.ForegroundExportFlowManager
+import com.banuba.sdk.export.data.PublishManager
 import com.banuba.sdk.token.storage.provider.TokenProvider
-import com.banuba.sdk.ve.data.PublishManager
-import com.banuba.sdk.ve.effects.WatermarkProvider
+import com.banuba.sdk.ve.effects.watermark.WatermarkProvider
 import com.banuba.sdk.ve.media.VideoGalleryResourceValidator
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
@@ -89,8 +89,10 @@ class MainKoinModule {
             StubImageLoader()
         }
 
-        single(named("videoDurationExtractor")) {
-            DurationExtractor(video = true)
+        single<EnableExportAudioProvider> {
+            object : EnableExportAudioProvider {
+                override var isEnable: Boolean = false
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.banuba.example.videoeditor.databinding.ActivityEditorBinding
-import com.banuba.sdk.ve.data.ExportResult
+import com.banuba.sdk.export.data.ExportResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditorActivity : AppCompatActivity() {
@@ -67,7 +67,7 @@ class EditorActivity : AppCompatActivity() {
                     showProgress(false)
                     Toast.makeText(
                         this,
-                        "Export Success: ${exportResult.message}",
+                        "Export Success: ${exportResult.additionalExportData}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

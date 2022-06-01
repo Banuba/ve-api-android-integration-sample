@@ -19,33 +19,29 @@ import androidx.lifecycle.viewModelScope
 import com.banuba.sdk.core.data.MediaDataGalleryValidator
 import com.banuba.sdk.core.data.MediaValidationResultType
 import com.banuba.sdk.core.domain.AspectRatioProvider
+import com.banuba.sdk.core.effects.DrawType
 import com.banuba.sdk.core.effects.IEqualizerEffect
+import com.banuba.sdk.core.effects.IVisualEffectDrawable
+import com.banuba.sdk.core.effects.RectParams
 import com.banuba.sdk.core.ext.copyFromAssetsToExternal
 import com.banuba.sdk.core.gl.GlViewport
 import com.banuba.sdk.core.media.DurationExtractor
-import com.banuba.sdk.effects.ve.time.speed.BaseSpeedEffectDrawable
-import com.banuba.sdk.effects.ve.time.speed.RapidEffect
-import com.banuba.sdk.effects.ve.visual.vhs.VHSDrawable
+import com.banuba.sdk.effects.ve.VideoEffectsHelper
 import com.banuba.sdk.export.data.ExportFlowManager
+import com.banuba.sdk.export.data.ExportResult
+import com.banuba.sdk.export.data.ExportTaskParams
 import com.banuba.sdk.playback.PlaybackError
-import com.banuba.sdk.playback.PlaybackUtils
 import com.banuba.sdk.playback.PlayerScaleType
 import com.banuba.sdk.playback.VideoPlayer
-import com.banuba.sdk.ve.data.ExportMusicParams
-import com.banuba.sdk.ve.data.ExportResult
-import com.banuba.sdk.ve.data.ExportTaskParams
 import com.banuba.sdk.ve.domain.TimeBundle
 import com.banuba.sdk.ve.domain.VideoRangeList
 import com.banuba.sdk.ve.domain.VideoRecordRange
 import com.banuba.sdk.ve.effects.Effects
-import com.banuba.sdk.ve.effects.RectParams
 import com.banuba.sdk.ve.effects.SpeedTimedEffect
 import com.banuba.sdk.ve.effects.TypedTimedEffect
 import com.banuba.sdk.ve.effects.VisualTimedEffect
-import com.banuba.sdk.ve.effects.`object`.GifObjectDrawable
-import com.banuba.sdk.ve.effects.`object`.TextObjectDrawable
-import com.banuba.sdk.ve.effects.lut.LUTDrawable
 import com.banuba.sdk.ve.effects.music.MusicEffect
+import com.banuba.sdk.ve.ext.VideoEditorUtils
 import com.banuba.sdk.ve.ext.setCoordinates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -114,7 +110,7 @@ class EditorViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val playlist = videos
                 .filter { videoValidator.getValidationResult(it) == MediaValidationResultType.VALID_FILE }
-                .mapNotNull { PlaybackUtils.createVideoRecordRange(it, appContext) }
+                .mapNotNull { VideoEditorUtils.createVideoRecordRange(it, appContext) }
             videoPlayer.setVideoRanges(playlist)
             exportVideosList.addAll(playlist)
         }
@@ -202,7 +198,7 @@ class EditorViewModel(
     }
 
     fun removeFxEffect() {
-        appliedEffects.removeAll { it.drawable is VHSDrawable }
+        appliedEffects.removeAll { it.drawable.type == DrawType.VISUAL }
         videoPlayer.setEffects(appliedEffects)
     }
 
@@ -213,7 +209,7 @@ class EditorViewModel(
     }
 
     fun removeTextEffect() {
-        appliedEffects.removeAll { it.drawable is TextObjectDrawable }
+        appliedEffects.removeAll { it.drawable.type == DrawType.TEXT }
         videoPlayer.setEffects(appliedEffects)
     }
 
@@ -224,7 +220,7 @@ class EditorViewModel(
     }
 
     fun removeGifEffect() {
-        appliedEffects.removeAll { it.drawable is GifObjectDrawable }
+        appliedEffects.removeAll { it.drawable.type == DrawType.GIF }
         videoPlayer.setEffects(appliedEffects)
     }
 
@@ -235,7 +231,7 @@ class EditorViewModel(
     }
 
     fun removeSpeedEffect() {
-        appliedEffects.removeAll { it.drawable is BaseSpeedEffectDrawable }
+        appliedEffects.removeAll { it.drawable.type == DrawType.TIME }
         videoPlayer.setEffects(appliedEffects)
     }
 
@@ -246,7 +242,7 @@ class EditorViewModel(
     }
 
     fun removeLutEffect() {
-        appliedEffects.removeAll { it.drawable is LUTDrawable }
+        appliedEffects.removeAll { it.drawable.type == DrawType.COLOR }
         videoPlayer.setEffects(appliedEffects)
     }
 
@@ -271,7 +267,8 @@ class EditorViewModel(
         val exportTaskParams = ExportTaskParams(
             videoRanges = VideoRangeList(exportVideosList),
             effects = Effects(visualStack, speedStack),
-            exportMusicParams = ExportMusicParams(exportMusicList, 1f),
+            musicEffects = exportMusicList,
+            videoVolume = 1F,
             coverFrameSize = Size(720, 1280),
             aspect = aspectRatioProvider.provide()        //by default provided aspect ratio = 9.0 / 16
         )
@@ -285,7 +282,11 @@ class EditorViewModel(
      * By default each fx effect applied on the whole video duration.
      */
     private fun generateVHSEffect(): VisualTimedEffect {
-        return VisualTimedEffect(effectDrawable = VHSDrawable())
+        val vhsDrawable = VideoEffectsHelper.takeAvailableFxEffects(appContext).find {
+            appContext.getString(it.nameRes) == "VHS"
+        }?.provide() ?: throw Exception("VHS video effect is not available!")
+        if (vhsDrawable !is IVisualEffectDrawable) throw TypeCastException("Drawable is not IVisualEffectDrawable type!")
+        return VisualTimedEffect(effectDrawable = vhsDrawable)
     }
 
     /**
@@ -308,7 +309,7 @@ class EditorViewModel(
         }
 
         return VisualTimedEffect(
-            effectDrawable = TextObjectDrawable(UUID.randomUUID(), bitmap, rectParams)
+            effectDrawable = VideoEffectsHelper.createTextEffect(UUID.randomUUID(), bitmap, rectParams)
         )
     }
 
@@ -327,7 +328,7 @@ class EditorViewModel(
         }
 
         return VisualTimedEffect(
-            effectDrawable = GifObjectDrawable(UUID.randomUUID(), stickerUri, rectParams)
+            effectDrawable = VideoEffectsHelper.createGifEffect(UUID.randomUUID(), stickerUri, rectParams)
         )
     }
 
@@ -336,7 +337,7 @@ class EditorViewModel(
      * By default each speed effect applied on the whole video duration.
      */
     private fun createRapidEffect(): SpeedTimedEffect {
-        val speedEffect = RapidEffect()
+        val speedEffect = VideoEffectsHelper.createSpeedEffect(2F)
         return SpeedTimedEffect(
             effectDrawable = speedEffect,
             endTimeBundle = TimeBundle(exportVideosList.size - 1, Int.MAX_VALUE)
@@ -345,7 +346,7 @@ class EditorViewModel(
 
     private fun createColorFilterEffect(): VisualTimedEffect {
         val colorEffectFile = appContext.copyFromAssetsToExternal("color_filter_example.png")
-        return VisualTimedEffect(LUTDrawable.create(colorEffectFile.path, Size(1024, 768)))
+        return VisualTimedEffect(VideoEffectsHelper.createLutEffect(colorEffectFile.path, Size(1024, 768)))
     }
 
     data class PlaybackMusicEffect(
