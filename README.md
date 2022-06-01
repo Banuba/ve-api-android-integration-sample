@@ -67,14 +67,14 @@ There is nothing complicated about it - [contact us](https://www.banuba.com/vide
 ## Token
 We offer а free 14-days trial for you could thoroughly test and assess Export API functionality in your app. To get access to your trial, please, get in touch with us by [filling a form](https://www.banuba.com/video-editor-sdk) on our website. Our sales managers will send you the trial token.
 
-Banuba token should be put [here](https://github.com/Banuba/ve-sdk-android-export-sample/blob/ae48357eace151e99da3d5ee9be125858663311f/app/src/main/res/values/strings.xml#L6).
+Banuba token should be put [here](https://github.com/Banuba/ve-api-android-integration-sample/blob/main/app/src/main/res/values/strings.xml#L3).
 
 ## Getting Started
 ### Add dependencies
 Please, specify a list of dependencies as in [app/build.gradle](app/build.gradle) file to integrate export functionality of Export API.
 
 ``` groovy
-def banubaSdkVersion = '1.22.0'
+def banubaSdkVersion = '1.23.0'
 implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
 implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
 implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
@@ -91,4 +91,3 @@ Also create **libs** directory in your project and add `banuba_sdk-release.aar`.
 // Banuba Face AR SDK dependencies
 implementation fileTree(dir: '../libs', include: ['*.aar'])
 ```
-
