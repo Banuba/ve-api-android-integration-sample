@@ -92,3 +92,7 @@ Also create **libs** directory in your project and add `banuba_sdk-release.aar`.
 // Banuba Face AR SDK dependencies
 implementation fileTree(dir: '../libs', include: ['*.aar'])
 ```
+
+## Migration guides
+[1.23.0](https://vebanuba.notion.site/1-23-d91a638b6e714141a2ba53dfa1823918)\
+[1.23.1](https://vebanuba.notion.site/1-23-1-3e683d15f95642528a02ce59b866b3da)
