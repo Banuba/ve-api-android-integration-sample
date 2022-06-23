@@ -21,7 +21,7 @@ See how to use basic screen settings with the API Entites. All of API referencie
 ## API Reference
 ### FAR Camera
 
-Camera is representation of BanubaSDK and BanubaEffectPlayer. All relevant information and docs is [here](https://docs.banuba.com/face-ar-sdk-v1/android/android_overview).
+Camera is representation of BanubaSDK and BanubaEffectPlayer. All relevant information and docs is [here](https://docs.banuba.com/face-ar-sdk/android/android_overview).
 
 ### Playback API
 
