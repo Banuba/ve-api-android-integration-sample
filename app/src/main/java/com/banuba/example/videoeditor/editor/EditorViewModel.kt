@@ -16,6 +16,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.banuba.example.videoeditor.export.CustomEffectDrawable
 import com.banuba.sdk.core.data.MediaDataGalleryValidator
 import com.banuba.sdk.core.data.MediaValidationResultType
 import com.banuba.sdk.core.domain.AspectRatioProvider
@@ -192,13 +193,24 @@ class EditorViewModel(
     }
 
     fun applyFxEffect() {
-        val vhsEffect = generateVHSEffect()
-        appliedEffects.add(vhsEffect)
+        val fxEffect = generateFxEffect()
+        appliedEffects.add(fxEffect)
         videoPlayer.setEffects(appliedEffects)
     }
 
     fun removeFxEffect() {
         appliedEffects.removeAll { it.drawable.type == DrawType.VISUAL }
+        videoPlayer.setEffects(appliedEffects)
+    }
+
+    fun applyCustomEffect() {
+        val customEffect = generateCustomEffect()
+        appliedEffects.add(customEffect)
+        videoPlayer.setEffects(appliedEffects)
+    }
+
+    fun removeCustomEffect() {
+        appliedEffects.removeAll { it.drawable.type == DrawType.CUSTOM }
         videoPlayer.setEffects(appliedEffects)
     }
 
@@ -287,6 +299,32 @@ class EditorViewModel(
         }?.provide() ?: throw Exception("VHS video effect is not available!")
         if (vhsDrawable !is IVisualEffectDrawable) throw TypeCastException("Drawable is not IVisualEffectDrawable type!")
         return VisualTimedEffect(effectDrawable = vhsDrawable)
+    }
+
+    /**
+     * Creates fx effect.
+     * To get full list of fx effects, check classes of BaseVisualEffectDrawable type.
+     * By default each fx effect applied on the whole video duration.
+     */
+    private fun generateFxEffect(): VisualTimedEffect {
+        val fxDrawable = VideoEffectsHelper.createFxEffect(
+            context = appContext,
+            resourceIdentifier = "vhs"
+        ) ?: throw Exception("Video effect is not available!")
+        return VisualTimedEffect(effectDrawable = fxDrawable)
+    }
+
+    /**
+     * Creates custom effect.
+     */
+    private fun generateCustomEffect(): VisualTimedEffect {
+        val (width, height) = 720 to 1280
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ALPHA_8)
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        paint.color = Color.WHITE
+        canvas.drawCircle(width / 2.0f, height / 2.0f, height / 5.0f, paint)
+        return VisualTimedEffect(effectDrawable = CustomEffectDrawable(bitmap))
     }
 
     /**
