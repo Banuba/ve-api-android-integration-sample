@@ -85,8 +85,10 @@ class EditorActivity : AppCompatActivity() {
         binding.fxEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 viewModel.applyFxEffect()
+                viewModel.applyCustomEffect()
             } else {
                 viewModel.removeFxEffect()
+                viewModel.removeCustomEffect()
             }
         }
 
