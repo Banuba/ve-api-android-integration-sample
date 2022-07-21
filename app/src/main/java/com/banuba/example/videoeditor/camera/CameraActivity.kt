@@ -258,7 +258,9 @@ class CameraActivity : AppCompatActivity() {
 
     private fun destroyFaceAr() {
         banubaSdkManager?.closeCamera()
-        banubaSdkManager?.releaseSurface()
+        banubaSdkManager?.setCallback(null)
+        banubaSdkManager?.effectPlayer?.playbackStop()
+        banubaSdkManager?.recycle()
         banubaSdkManager = null
         BanubaSdkManager.deinitialize()
     }
