@@ -3,6 +3,7 @@ package com.banuba.example.videoeditor.export
 import android.net.Uri
 import androidx.core.net.toFile
 import com.banuba.sdk.core.VideoResolution
+import com.banuba.sdk.core.ext.toPx
 import com.banuba.sdk.core.media.MediaFileNameHelper
 import com.banuba.sdk.export.data.ExportParams
 import com.banuba.sdk.export.data.ExportParamsProvider
@@ -39,7 +40,7 @@ class CustomExportParamsProvider(
 
         val paramsHdWithWatermark =
             ExportParams.Builder(VideoResolution.Exact.HD)
-                .effects(effects.withWatermark(watermarkBuilder, WatermarkAlignment.BOTTOM_RIGHT))
+                .effects(effects.withWatermark(watermarkBuilder, WatermarkAlignment.BottomRight(marginRightPx = 16.toPx)))
                 .fileName("export_default")
                 .debugEnabled(true)
                 .videoRangeList(videoRangeList)
