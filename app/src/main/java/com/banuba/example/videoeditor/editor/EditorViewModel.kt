@@ -1,5 +1,6 @@
 package com.banuba.example.videoeditor.editor
 
+import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -11,10 +12,10 @@ import android.util.Log
 import android.util.Size
 import android.view.SurfaceHolder
 import androidx.core.net.toUri
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.banuba.example.videoeditor.export.CustomEffectDrawable
 import com.banuba.sdk.core.data.MediaDataGalleryValidator
@@ -50,12 +51,12 @@ import java.util.Stack
 import java.util.UUID
 
 class EditorViewModel(
-    private val appContext: Context,
+    private val appContext: Application,
     private val videoValidator: MediaDataGalleryValidator,
     private val videoPlayer: VideoPlayer,
     private val exportFlowManager: ExportFlowManager,
     private val aspectRatioProvider: AspectRatioProvider
-) : ViewModel() {
+) : AndroidViewModel(appContext) {
 
     private val _errorMsg = MutableLiveData<String>()
     val errorMsg: LiveData<String>
