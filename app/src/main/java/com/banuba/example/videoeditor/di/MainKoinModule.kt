@@ -38,14 +38,14 @@ class MainKoinModule {
             )
         }
 
-        single<TokenProvider>(named("banubaTokenProvider"), override = true) {
+        single<TokenProvider>(named("banubaTokenProvider")) {
             object : TokenProvider {
                 override fun getToken(): String =
                     androidContext().getString(R.string.banuba_token)
             }
         }
 
-        single<ExportFlowManager>(override = true) {
+        single<ExportFlowManager> {
             ForegroundExportFlowManager(
                 exportDataProvider = get(),
                 sessionParamsProvider = get(),
@@ -58,7 +58,7 @@ class MainKoinModule {
             )
         }
 
-        factory<ExportParamsProvider>(override = true) {
+        factory<ExportParamsProvider> {
             CustomExportParamsProvider(
                 exportDir = get(named("exportDir")),
                 mediaFileNameHelper = get(),
@@ -67,7 +67,7 @@ class MainKoinModule {
             )
         }
 
-        single<WatermarkProvider>(override = true) {
+        single<WatermarkProvider> {
             object : WatermarkProvider {
                 override fun getWatermarkBitmap(): Bitmap? = BitmapFactory.decodeResource(
                     androidContext().resources,
@@ -76,7 +76,7 @@ class MainKoinModule {
             }
         }
 
-        single<PublishManager>(override = true) {
+        single<PublishManager> {
             CustomPublishManager(
                 context = androidContext(),
                 albumName = "Banuba Video Editor",
@@ -85,7 +85,7 @@ class MainKoinModule {
             )
         }
 
-        single<ImageLoader>(override = true) {
+        single<ImageLoader> {
             StubImageLoader()
         }
 
