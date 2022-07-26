@@ -17,6 +17,7 @@ import com.banuba.sdk.token.storage.provider.TokenProvider
 import com.banuba.sdk.ve.effects.watermark.WatermarkProvider
 import com.banuba.sdk.ve.media.VideoGalleryResourceValidator
 import kotlinx.coroutines.Dispatchers
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -28,7 +29,7 @@ class MainKoinModule {
 
         viewModel {
             EditorViewModel(
-                appContext = androidContext(),
+                appContext = androidApplication(),
                 videoValidator = VideoGalleryResourceValidator(
                     context = androidContext()
                 ),
