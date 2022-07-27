@@ -96,4 +96,5 @@ implementation fileTree(dir: '../libs', include: ['*.aar'])
 ## Migration guides
 [1.23.0](https://vebanuba.notion.site/1-23-d91a638b6e714141a2ba53dfa1823918)\
 [1.23.1](https://vebanuba.notion.site/1-23-1-3e683d15f95642528a02ce59b866b3da)\
-[1.24.0](https://vebanuba.notion.site/1-24-08daf21e88d64e0cae3747eb5a4b0d08)
+[1.24.0](https://vebanuba.notion.site/1-24-08daf21e88d64e0cae3747eb5a4b0d08)\
+[1.24.1](https://vebanuba.notion.site/1-24-1-0550e0880f38434bb45f928f7035a568)
