@@ -6,7 +6,7 @@ import com.banuba.sdk.core.effects.DrawType
 import com.banuba.sdk.core.effects.EffectRenderer
 import com.banuba.sdk.core.effects.RenderParamsProvider
 import com.banuba.sdk.core.effects.VisualEffectDrawable
-import java.util.UUID
+import java.util.*
 
 class CustomEffectDrawable(private val bitmap: Bitmap) : VisualEffectDrawable {
 

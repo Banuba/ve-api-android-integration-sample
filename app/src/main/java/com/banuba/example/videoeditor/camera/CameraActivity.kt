@@ -17,33 +17,25 @@ import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import com.banuba.example.videoeditor.R
 import com.banuba.example.videoeditor.databinding.ActivityCameraBinding
-import com.banuba.example.videoeditor.di.MainKoinModule
 import com.banuba.example.videoeditor.editor.EditorActivity
 import com.banuba.example.videoeditor.utils.GetMultipleContents
 import com.banuba.sdk.camera.Facing
 import com.banuba.sdk.entity.RecordedVideoInfo
-import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.manager.IEventCallback
-import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
-import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
 import com.banuba.sdk.token.storage.license.EditorLicenseManager
 import com.banuba.sdk.token.storage.provider.TokenProvider
 import com.banuba.sdk.types.Data
-import com.banuba.sdk.ve.di.VeSdkKoinModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.core.context.loadKoinModules
 import org.koin.core.context.stopKoin
-import org.koin.core.context.unloadKoinModules
-import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
+import kotlin.collections.ArrayDeque
 
 class CameraActivity : AppCompatActivity() {
 

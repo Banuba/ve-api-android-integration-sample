@@ -1,7 +1,6 @@
 package com.banuba.example.videoeditor.editor
 
 import android.app.Application
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -12,11 +11,7 @@ import android.util.Log
 import android.util.Size
 import android.view.SurfaceHolder
 import androidx.core.net.toUri
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.banuba.example.videoeditor.export.CustomEffectDrawable
 import com.banuba.sdk.core.data.MediaDataGalleryValidator
 import com.banuba.sdk.core.data.MediaValidationResultType
@@ -47,8 +42,7 @@ import com.banuba.sdk.ve.ext.VideoEditorUtils
 import com.banuba.sdk.ve.ext.setCoordinates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Stack
-import java.util.UUID
+import java.util.*
 
 class EditorViewModel(
     private val appContext: Application,
