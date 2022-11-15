@@ -54,6 +54,8 @@ class CameraActivity : AppCompatActivity() {
 
         private const val RECORD_BTN_SCALE_FACTOR = 1.3f
 
+        private const val SAMPLE_EFFECT = "AsaiLines"
+
         private val REQUIRED_PERMISSIONS = arrayOf(
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO
@@ -132,7 +134,7 @@ class CameraActivity : AppCompatActivity() {
         binding.applyMaskButton.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 binding.applyBeautyButton.isChecked = false
-                applyEffect("AsaiLines")
+                applyEffect(SAMPLE_EFFECT)
             } else {
                 cancelEffect()
             }
