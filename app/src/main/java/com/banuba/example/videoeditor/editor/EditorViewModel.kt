@@ -22,9 +22,9 @@ import com.banuba.sdk.core.data.MediaDataGalleryValidator
 import com.banuba.sdk.core.data.MediaValidationResultType
 import com.banuba.sdk.core.domain.AspectRatioProvider
 import com.banuba.sdk.core.effects.DrawType
-import com.banuba.sdk.core.effects.IEqualizerEffect
-import com.banuba.sdk.core.effects.IVisualEffectDrawable
+import com.banuba.sdk.core.effects.EqualizerEffect
 import com.banuba.sdk.core.effects.RectParams
+import com.banuba.sdk.core.effects.VisualEffectDrawable
 import com.banuba.sdk.core.ext.copyFromAssetsToExternal
 import com.banuba.sdk.core.gl.GlViewport
 import com.banuba.sdk.core.media.DurationExtractor
@@ -115,6 +115,7 @@ class EditorViewModel(
                 .mapNotNull { VideoEditorUtils.createVideoRecordRange(it, appContext) }
             videoPlayer.setVideoRanges(playlist)
             exportVideosList.addAll(playlist)
+            play()
         }
     }
 
@@ -298,7 +299,7 @@ class EditorViewModel(
         val vhsDrawable = VideoEffectsHelper.takeAvailableFxEffects(appContext).find {
             appContext.getString(it.nameRes) == "VHS"
         }?.provide() ?: throw Exception("VHS video effect is not available!")
-        if (vhsDrawable !is IVisualEffectDrawable) throw TypeCastException("Drawable is not IVisualEffectDrawable type!")
+        if (vhsDrawable !is VisualEffectDrawable) throw TypeCastException("Drawable is not IVisualEffectDrawable type!")
         return VisualTimedEffect(effectDrawable = vhsDrawable)
     }
 
@@ -397,6 +398,6 @@ class EditorViewModel(
         override val normalSpeedEffectDurationMs: Long,
         override val volume: Float,
         override val playUri: Uri,
-        override val equalizerEffect: IEqualizerEffect?
+        override val equalizerEffect: EqualizerEffect?
     ) : MusicEffect
 }

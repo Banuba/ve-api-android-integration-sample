@@ -54,6 +54,8 @@ class CameraActivity : AppCompatActivity() {
 
         private const val RECORD_BTN_SCALE_FACTOR = 1.3f
 
+        private const val SAMPLE_EFFECT = "AsaiLines"
+
         private val REQUIRED_PERMISSIONS = arrayOf(
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO
@@ -106,8 +108,6 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private var videoEditorKoinModules: List<Module> = emptyList()
-
     private val timeBasedFileNameFormat = SimpleDateFormat("yyyy.MM.dd_HH.mm.ss", Locale.ENGLISH)
 
     private var banubaSdkManager: BanubaSdkManager? = null
@@ -134,7 +134,7 @@ class CameraActivity : AppCompatActivity() {
         binding.applyMaskButton.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 binding.applyBeautyButton.isChecked = false
-                applyEffect("Retrowave")
+                applyEffect(SAMPLE_EFFECT)
             } else {
                 cancelEffect()
             }
@@ -180,7 +180,6 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        releaseVideoEditor()
 
         prepareFaceAR()
     }
@@ -204,7 +203,6 @@ class CameraActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         destroyFaceAr()
-        destroyEditor()
         stopKoin()
     }
 
@@ -312,17 +310,6 @@ class CameraActivity : AppCompatActivity() {
         banubaSdkManager?.stopVideoRecording()
     }
 
-    private fun releaseVideoEditor() {
-        if (videoEditorKoinModules.isNotEmpty()) {
-            destroyEditor()
-        }
-    }
-
-    private fun destroyEditor() {
-        unloadKoinModules(videoEditorKoinModules)
-        videoEditorKoinModules = emptyList()
-    }
-
     private fun openEditor(videos: List<Uri>) {
         destroyFaceAr()
         initializeEditor()
@@ -331,14 +318,6 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun initializeEditor() {
-        videoEditorKoinModules = listOf(
-            TokenStorageKoinModule().module,
-            VeSdkKoinModule().module,
-            VeExportKoinModule().module,
-            MainKoinModule().module,
-            VePlaybackSdkKoinModule().module
-        )
-        loadKoinModules(videoEditorKoinModules)
         CoroutineScope(Dispatchers.Main.immediate).launch {
             EditorLicenseManager.initialize(tokenProvider.getToken())
         }

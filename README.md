@@ -74,7 +74,7 @@ Banuba token should be put [here](https://github.com/Banuba/ve-api-android-integ
 Please, specify a list of dependencies as in [app/build.gradle](app/build.gradle) file to integrate export functionality of Export API.
 
 ``` groovy
-def banubaSdkVersion = '1.24.0'
+def banubaSdkVersion = '1.25.0'
 implementation "com.banuba.sdk:ffmpeg:4.4"
 implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
 implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
@@ -83,7 +83,7 @@ implementation "com.banuba.sdk:ve-playback-sdk:${banubaSdkVersion}"
 implementation "com.banuba.sdk:ve-export-sdk:${banubaSdkVersion}"
 implementation "com.banuba.sdk:ve-effects-sdk:${banubaSdkVersion}"
 
-implementation 'com.banuba.sdk:effect-player:0.38.5'
+implementation 'com.banuba.sdk:effect-player:1.5.0'
 ```
 
 Also create **libs** directory in your project and add `banuba_sdk-release.aar`. Then open build.gradle (Module: app) and add Banuba SDK dependencies for your project:
@@ -98,4 +98,5 @@ implementation fileTree(dir: '../libs', include: ['*.aar'])
 [1.23.1](https://vebanuba.notion.site/1-23-1-3e683d15f95642528a02ce59b866b3da)\
 [1.24.0](https://vebanuba.notion.site/1-24-08daf21e88d64e0cae3747eb5a4b0d08)\
 [1.24.1](https://vebanuba.notion.site/1-24-1-0550e0880f38434bb45f928f7035a568)\
-[1.24.2](https://vebanuba.notion.site/1-24-2-fffb57ad78b246af9a0903be8626967a)
+[1.24.2](https://vebanuba.notion.site/1-24-2-fffb57ad78b246af9a0903be8626967a)\
+[1.25.0](https://vebanuba.notion.site/1-25-0-9240af0c9b694bc596d8326dd38b7c17)

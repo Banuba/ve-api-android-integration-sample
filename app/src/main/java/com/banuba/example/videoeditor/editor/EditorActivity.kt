@@ -51,6 +51,8 @@ class EditorActivity : AppCompatActivity() {
         binding = ActivityEditorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel.prepare(binding.videoPlayerSurfaceView.holder)
+
         predefinedVideos?.toTypedArray()?.let {
             viewModel.addVideosToPlayback(it)
         }
@@ -137,8 +139,6 @@ class EditorActivity : AppCompatActivity() {
             showProgress(true)
             viewModel.startExport()
         }
-
-        viewModel.prepare(binding.videoPlayerSurfaceView.holder)
     }
 
     override fun onStart() {
