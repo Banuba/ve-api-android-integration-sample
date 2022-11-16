@@ -2,10 +2,12 @@ package com.banuba.example.videoeditor.camera
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -20,6 +22,7 @@ import com.banuba.example.videoeditor.databinding.ActivityCameraBinding
 import com.banuba.example.videoeditor.editor.EditorActivity
 import com.banuba.example.videoeditor.utils.GetMultipleContents
 import com.banuba.sdk.camera.Facing
+import com.banuba.sdk.core.ext.isDirectory
 import com.banuba.sdk.entity.RecordedVideoInfo
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.manager.IEventCallback
@@ -33,6 +36,7 @@ import org.koin.android.ext.android.inject
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayDeque
@@ -220,7 +224,10 @@ class CameraActivity : AppCompatActivity() {
             .appendPath(name)
             .build()
             .toString()
-        effectManager.loadAsync(maskUrl)
+        CoroutineScope(Dispatchers.IO).launch {
+            copyFromAssetsToInternalStorage(this@CameraActivity, name)
+            effectManager.loadAsync(maskUrl)
+        }
     }
 
     private fun cancelEffect() {
@@ -328,5 +335,41 @@ class CameraActivity : AppCompatActivity() {
         }
         binding.openEditorButton.isVisible = videosStack.size > 0
         binding.galleryButton.isVisible = videosStack.size == 0
+    }
+
+    private fun copyFromAssetsToInternalStorage(context: Context, filename: String) {
+        try {
+            val effectAssetFolderPath = "bnb-resources/effects/$filename"
+            val deviceEffectFolder = File("${context.filesDir}/banuba/$effectAssetFolderPath")
+
+            if (deviceEffectFolder.exists()) {
+                deviceEffectFolder.deleteRecursively()
+            }
+
+            if (!deviceEffectFolder.exists()) {
+                deviceEffectFolder.mkdir()
+            }
+
+            val namesOfFilesAndFolders = assets.list(effectAssetFolderPath)
+            if (namesOfFilesAndFolders != null) {
+                for (element in namesOfFilesAndFolders) {
+                    val elementPath = "$effectAssetFolderPath/$element"
+                    if (assets.isDirectory(elementPath)) {
+                        val directoryFile = File(deviceEffectFolder, element)
+                        directoryFile.mkdir()
+                        val namesOfFiles = assets.list(elementPath)
+                        if (namesOfFiles != null) {
+                            for (file in namesOfFiles) {
+                                assets.open("$elementPath/$file").copyTo(FileOutputStream(File(directoryFile, file)))
+                            }
+                        }
+                    } else {
+                        assets.open(elementPath).copyTo(FileOutputStream(File(deviceEffectFolder, element)))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("CameraActivityError", "$e")
+        }
     }
 }
