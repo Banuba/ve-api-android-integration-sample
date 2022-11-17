@@ -2,12 +2,10 @@ package com.banuba.example.videoeditor.camera
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -22,7 +20,6 @@ import com.banuba.example.videoeditor.databinding.ActivityCameraBinding
 import com.banuba.example.videoeditor.editor.EditorActivity
 import com.banuba.example.videoeditor.utils.GetMultipleContents
 import com.banuba.sdk.camera.Facing
-import com.banuba.sdk.core.ext.isDirectory
 import com.banuba.sdk.entity.RecordedVideoInfo
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.manager.IEventCallback
@@ -36,7 +33,6 @@ import org.koin.android.ext.android.inject
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
 import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayDeque
