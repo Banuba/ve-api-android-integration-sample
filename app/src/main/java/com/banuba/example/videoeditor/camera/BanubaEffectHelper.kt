@@ -4,26 +4,39 @@ import android.content.res.AssetManager
 import android.net.Uri
 import android.util.Log
 import com.banuba.sdk.core.ext.isDirectory
+import com.banuba.sdk.manager.BanubaSdkManager
 import java.io.File
 import java.io.IOException
 
-class EffectLoaderManager(
-    private val assetManager: AssetManager
-)  {
+/**
+ * Banuba Face AR EffectPlayer can only apply effects stored on the internal memory of the device.
+ * This util class prepares AR effect before applying in Banuba Face AR EffectPlayer.
+ * You can use this implementation it in your project.
+ */
+class BanubaEffectHelper {
 
     companion object {
-        const val TAG = "EffectsResourceManager"
+        const val TAG = "BanubaEffectHelper"
 
-        const val DIR_EFFECTS = "effects"
+        private const val DIR_EFFECTS = "effects"
+        private const val assetsEffectsDir = "bnb-resources/$DIR_EFFECTS"
     }
 
-    val assetsEffectsDir = "bnb-resources/$DIR_EFFECTS"
+    fun prepareEffect(
+        assetManager: AssetManager,
+        assetEffectName: String
+    ): Effect {
+        val effectUri = Uri.parse(BanubaSdkManager.getResourcesBase())
+            .buildUpon()
+            .appendPath(DIR_EFFECTS)
+            .appendPath(assetEffectName)
+            .build()
 
-    fun prepareEffect(effectUri: String, assetEffectsName: String): Effect {
-        val file = File(effectUri)
+        val file = File(effectUri.toString())
         copyResources(
+            assetManager,
             file,
-            "$assetsEffectsDir/$assetEffectsName"
+            "$assetsEffectsDir/$assetEffectName"
         )
         val uri = Uri.fromFile(file)
         val previewImagePath = uri
@@ -31,10 +44,11 @@ class EffectLoaderManager(
             .appendPath("preview.png")
             .build()
 
-        return Effect(uri, assetEffectsName, previewImagePath)
+        return Effect(effectUri, assetEffectName, previewImagePath)
     }
 
     private fun copyResources(
+        assetManager: AssetManager,
         targetDir: File,
         assetRoot: String
     ) {
@@ -54,19 +68,24 @@ class EffectLoaderManager(
                 if (assetManager.isDirectory(sourcePath)) {
                     destFile.mkdirs()
                     copyResources(
+                        assetManager = assetManager,
                         targetDir = destFile,
                         assetRoot = sourcePath
                     )
                 } else {
-                    copyFile(sourcePath, destFile)
+                    copyFile(assetManager, sourcePath, destFile)
                 }
             }
         } else {
-            copyFile(assetRoot, targetDir)
+            copyFile(assetManager, assetRoot, targetDir)
         }
     }
 
-    private fun copyFile(sourcePath: String, desFile: File) {
+    private fun copyFile(
+        assetManager: AssetManager,
+        sourcePath: String,
+        desFile: File
+    ) {
         try {
             assetManager.open(sourcePath).use { input ->
                 desFile.outputStream().use { output ->
@@ -77,4 +96,10 @@ class EffectLoaderManager(
             Log.w(TAG, "Could not copy file $sourcePath")
         }
     }
+
+    data class Effect(
+        val uri: Uri,
+        val name: String,
+        val previewImagePath: Uri
+    )
 }

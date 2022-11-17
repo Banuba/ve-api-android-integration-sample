@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -103,7 +104,7 @@ class CameraActivity : AppCompatActivity() {
     private val timeBasedFileNameFormat = SimpleDateFormat("yyyy.MM.dd_HH.mm.ss", Locale.ENGLISH)
 
     private var banubaSdkManager: BanubaSdkManager? = null
-    private var effectLoaderManager: EffectLoaderManager? = null
+    private var effectsHelper = BanubaEffectHelper()
 
     private var isBeautyApplied = false
     private var isMaskApplied = false
@@ -214,21 +215,22 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun applyEffect(name: String) {
-        val effectManager = banubaSdkManager?.effectManager ?: return
-        val maskUrl = Uri.parse(BanubaSdkManager.getResourcesBase())
-            .buildUpon()
-            .appendPath("effects")
-            .appendPath(name)
-            .build()
-            .toString()
-        CoroutineScope(Dispatchers.IO).launch {
-            effectLoaderManager?.prepareEffect(maskUrl, name)
-            effectManager.loadAsync(maskUrl)
+        val manager = banubaSdkManager?.effectManager
+        if (manager == null) {
+            Log.w(
+                "CameraActivity",
+                "Cannot apply effect: Banuba Face AR Effect Player is not initialized"
+            )
+        } else {
+            CoroutineScope(Dispatchers.IO).launch {
+                val effect = effectsHelper.prepareEffect(assets, name)
+                manager.loadAsync(effect.uri.toString())
+            }
         }
     }
 
     private fun cancelEffect() {
-        banubaSdkManager?.effectManager?.loadAsync("maskUrl") ?: return
+        banubaSdkManager?.effectManager?.loadAsync("") ?: return
     }
 
     private fun prepareFaceAR() {
@@ -248,7 +250,6 @@ class CameraActivity : AppCompatActivity() {
         BanubaSdkManager.initialize(applicationContext, getString(R.string.banuba_token))
         banubaSdkManager = BanubaSdkManager(applicationContext)
         banubaSdkManager?.setCallback(cameraEventCallback)
-        effectLoaderManager = EffectLoaderManager(assets)
     }
 
     private fun destroyFaceAr() {
