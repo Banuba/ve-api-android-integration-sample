@@ -107,6 +107,7 @@ class CameraActivity : AppCompatActivity() {
     private val timeBasedFileNameFormat = SimpleDateFormat("yyyy.MM.dd_HH.mm.ss", Locale.ENGLISH)
 
     private var banubaSdkManager: BanubaSdkManager? = null
+    private var effectLoaderManager: EffectLoaderManager? = null
 
     private var isBeautyApplied = false
     private var isMaskApplied = false
@@ -225,7 +226,7 @@ class CameraActivity : AppCompatActivity() {
             .build()
             .toString()
         CoroutineScope(Dispatchers.IO).launch {
-            copyFromAssetsToInternalStorage(this@CameraActivity, name)
+            effectLoaderManager?.prepareEffect(maskUrl, name)
             effectManager.loadAsync(maskUrl)
         }
     }
@@ -251,6 +252,7 @@ class CameraActivity : AppCompatActivity() {
         BanubaSdkManager.initialize(applicationContext, getString(R.string.banuba_token))
         banubaSdkManager = BanubaSdkManager(applicationContext)
         banubaSdkManager?.setCallback(cameraEventCallback)
+        effectLoaderManager = EffectLoaderManager(assets)
     }
 
     private fun destroyFaceAr() {
@@ -335,41 +337,5 @@ class CameraActivity : AppCompatActivity() {
         }
         binding.openEditorButton.isVisible = videosStack.size > 0
         binding.galleryButton.isVisible = videosStack.size == 0
-    }
-
-    private fun copyFromAssetsToInternalStorage(context: Context, filename: String) {
-        try {
-            val effectAssetFolderPath = "bnb-resources/effects/$filename"
-            val deviceEffectFolder = File("${context.filesDir}/banuba/$effectAssetFolderPath")
-
-            if (deviceEffectFolder.exists()) {
-                deviceEffectFolder.deleteRecursively()
-            }
-
-            if (!deviceEffectFolder.exists()) {
-                deviceEffectFolder.mkdir()
-            }
-
-            val namesOfFilesAndFolders = assets.list(effectAssetFolderPath)
-            if (namesOfFilesAndFolders != null) {
-                for (element in namesOfFilesAndFolders) {
-                    val elementPath = "$effectAssetFolderPath/$element"
-                    if (assets.isDirectory(elementPath)) {
-                        val directoryFile = File(deviceEffectFolder, element)
-                        directoryFile.mkdir()
-                        val namesOfFiles = assets.list(elementPath)
-                        if (namesOfFiles != null) {
-                            for (file in namesOfFiles) {
-                                assets.open("$elementPath/$file").copyTo(FileOutputStream(File(directoryFile, file)))
-                            }
-                        }
-                    } else {
-                        assets.open(elementPath).copyTo(FileOutputStream(File(deviceEffectFolder, element)))
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("CameraActivityError", "$e")
-        }
     }
 }
