@@ -1,8 +1,8 @@
-package com.banuba.example.videoeditor.di
+package com.banuba.example.videoeditor
 
+import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.banuba.example.videoeditor.R
 import com.banuba.example.videoeditor.editor.EditorViewModel
 import com.banuba.example.videoeditor.export.CustomExportParamsProvider
 import com.banuba.example.videoeditor.export.CustomPublishManager
@@ -13,17 +13,39 @@ import com.banuba.sdk.export.data.ExportFlowManager
 import com.banuba.sdk.export.data.ExportParamsProvider
 import com.banuba.sdk.export.data.ForegroundExportFlowManager
 import com.banuba.sdk.export.data.PublishManager
+import com.banuba.sdk.export.di.VeExportKoinModule
+import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
+import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
 import com.banuba.sdk.token.storage.provider.TokenProvider
+import com.banuba.sdk.ve.di.VeSdkKoinModule
 import com.banuba.sdk.ve.effects.watermark.WatermarkProvider
 import com.banuba.sdk.ve.media.VideoGalleryResourceValidator
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-class MainKoinModule {
+class BanubaVideoEditorSDK {
+    fun initialize(application: Application) {
+        startKoin {
+            androidContext(application)
+            allowOverride(true)
+
+            modules(
+                VeSdkKoinModule().module,
+                VeExportKoinModule().module,
+                VePlaybackSdkKoinModule().module,
+                TokenStorageKoinModule().module,
+                VideoEditorApiModule().module
+            )
+        }
+    }
+}
+
+private class VideoEditorApiModule {
 
     val module = module {
 
