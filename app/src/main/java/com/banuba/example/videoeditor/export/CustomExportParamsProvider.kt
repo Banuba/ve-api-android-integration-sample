@@ -17,9 +17,10 @@ import com.banuba.sdk.ve.ext.withWatermark
 class CustomExportParamsProvider(
     private val exportDir: Uri,
     private val mediaFileNameHelper: MediaFileNameHelper,
-    private val watermarkBuilder: WatermarkBuilder,
-    private val exportAudioProvider: EnableExportAudioProvider
+    private val watermarkBuilder: WatermarkBuilder
 ) : ExportParamsProvider {
+
+    private val addSoundtrackFile = false
 
     override fun provideExportParams(
         effects: Effects,
@@ -32,7 +33,7 @@ class CustomExportParamsProvider(
             mkdirs()
         }
 
-        val extraSoundtrackUri = if (exportAudioProvider.isEnable) {
+        val extraSoundtrackUri = if (addSoundtrackFile) {
             Uri.parse(exportSessionDir.toString()).buildUpon()
                 .appendPath(mediaFileNameHelper.generateExportSoundtrackFileName())
                 .build()

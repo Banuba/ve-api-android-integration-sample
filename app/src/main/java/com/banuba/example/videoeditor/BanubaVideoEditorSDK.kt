@@ -5,14 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.banuba.example.videoeditor.editor.EditorViewModel
 import com.banuba.example.videoeditor.export.CustomExportParamsProvider
-import com.banuba.example.videoeditor.export.CustomPublishManager
-import com.banuba.example.videoeditor.export.EnableExportAudioProvider
-import com.banuba.example.videoeditor.export.StubImageLoader
+import com.banuba.example.videoeditor.utils.CustomPublishManager
+import com.banuba.example.videoeditor.utils.StubImageLoader
 import com.banuba.sdk.core.domain.ImageLoader
-import com.banuba.sdk.export.data.ExportFlowManager
-import com.banuba.sdk.export.data.ExportParamsProvider
-import com.banuba.sdk.export.data.ForegroundExportFlowManager
-import com.banuba.sdk.export.data.PublishManager
+import com.banuba.sdk.export.data.*
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
 import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
@@ -85,8 +81,7 @@ private class VideoEditorApiModule {
             CustomExportParamsProvider(
                 exportDir = get(named("exportDir")),
                 mediaFileNameHelper = get(),
-                watermarkBuilder = get(),
-                exportAudioProvider = get()
+                watermarkBuilder = get()
             )
         }
 
@@ -112,10 +107,36 @@ private class VideoEditorApiModule {
             StubImageLoader()
         }
 
-        single<EnableExportAudioProvider> {
-            object : EnableExportAudioProvider {
-                override var isEnable: Boolean = false
-            }
+        /**
+         * Override to run export in foreground mode.
+         */
+        single<ExportFlowManager>(named("foregroundExportFlowManager")) {
+            ForegroundExportFlowManager(
+                exportDataProvider = get(),
+                sessionParamsProvider = get(),
+                exportSessionHelper = get(),
+                exportDir = get(named("exportDir")),
+                publishManager = get(),
+                errorParser = get(),
+                mediaFileNameHelper = get(),
+                exportBundleProvider = get()
+            )
+        }
+
+        /**
+         * Override to run export in background mode.
+         */
+        single<ExportFlowManager>(named("backgroundExportFlowManager")) {
+            BackgroundExportFlowManager(
+                exportDataProvider = get(),
+                sessionParamsProvider = get(),
+                exportSessionHelper = get(),
+                exportNotificationManager = get(),
+                exportDir = get(named("exportDir")),
+                publishManager = get(),
+                errorParser = get(),
+                exportBundleProvider = get()
+            )
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.banuba.example.videoeditor.export
+package com.banuba.example.videoeditor.utils
 
 import android.content.ContentValues
 import android.content.Context
