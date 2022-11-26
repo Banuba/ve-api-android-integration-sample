@@ -42,32 +42,35 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/backgroundExportBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Background Export"
+        android:text="Run export in Background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/previewParentView" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/foregroundExportBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Foreground Export"
+        android:text="Run export in Foreground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/backgroundExportBtn"
         tools:ignore="HardcodedText" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/stopExportBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/red_500"
         android:text="Stop Export"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

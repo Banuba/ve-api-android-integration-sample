@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,18 +12,8 @@ import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.banuba.example.videoeditor.databinding.ActivityExportBinding
-import com.banuba.sdk.core.Rotation
-import com.banuba.sdk.core.domain.AspectRatioProvider
-import com.banuba.sdk.core.domain.VideoSourceType
-import com.banuba.sdk.core.media.DurationExtractor
-import com.banuba.sdk.export.data.ExportFlowManager
 import com.banuba.sdk.export.data.ExportResult
-import com.banuba.sdk.export.data.ExportStopReason
-import com.banuba.sdk.export.data.ExportTaskParams
-import com.banuba.sdk.ve.domain.VideoRangeList
-import com.banuba.sdk.ve.domain.VideoRecordRange
-import org.koin.android.ext.android.inject
-import org.koin.core.qualifier.named
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
 /**
@@ -37,24 +26,20 @@ import java.io.File
 class ExportActivity : AppCompatActivity() {
 
     companion object {
-        private const val TAG = "ExportActivity"
+        const val TAG = "ExportSample"
     }
 
-    private var isBackgroundExport = true
+    private var runExportInForeground = true
 
-    // Step1
-    // Declare ExportFlowManager for your app - foreground or background(user can interact with UI).
-    private val backgroundExportFlowManager: ExportFlowManager by inject(named("backgroundExportFlowManager"))
-    private val foregroundExportFlowManager: ExportFlowManager by inject(named("foregroundExportFlowManager"))
-    private val aspectRatioProvider: AspectRatioProvider by inject()
+    private val viewModel by viewModel<ExportViewModel>()
 
-    // Step 2
     // Create result observer - all export execution results are delivered here.
     private val exportResultObserver = Observer<ExportResult> { exportResult ->
         when (exportResult) {
             is ExportResult.Progress -> {
                 showProgress(true)
                 allowPlayingVideo(false)
+                allowStop(true)
 
                 Log.d(TAG, "Export video is in progress")
                 binding.previewImageView.setImageURI(exportResult.preview)
@@ -63,6 +48,7 @@ class ExportActivity : AppCompatActivity() {
             is ExportResult.Success -> {
                 showProgress(false)
                 allowPlayingVideo(true)
+                allowStop(false)
                 showToast("Export video finished successfully!")
 
                 // We take the first video for simplicity. Export can return list of video.
@@ -76,6 +62,7 @@ class ExportActivity : AppCompatActivity() {
             is ExportResult.Error -> {
                 showProgress(false)
                 allowPlayingVideo(false)
+                allowStop(false)
 
                 showToast("Export video failed!")
                 Log.e(TAG, "Error while exporting video = ${exportResult.type.messageResId}")
@@ -84,6 +71,7 @@ class ExportActivity : AppCompatActivity() {
             is ExportResult.Inactive, is ExportResult.Stopped -> {
                 showProgress(false)
                 allowPlayingVideo(false)
+                allowStop(false)
                 Log.d(TAG, "Export video stopped")
             }
         }
@@ -91,68 +79,31 @@ class ExportActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityExportBinding
 
+    private val pickSampleVideos = registerForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { videosUri ->
+        if (videosUri.isNullOrEmpty()) {
+            showToast("Please select video to proceed export!")
+            Log.w(TAG, "No video selected to proceed export!")
+            return@registerForActivityResult
+        }
+
+        showProgress(true)
+
+        viewModel.startExport(videosUri, runExportInForeground)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityExportBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Step 3
         // Observe export results depends on flow - foreground or background
-        backgroundExportFlowManager.resultData.observe(this, exportResultObserver)
-        foregroundExportFlowManager.resultData.observe(this, exportResultObserver)
+        viewModel.exportBackgroundData.observe(this, exportResultObserver)
+        viewModel.exportForegroundData.observe(this, exportResultObserver)
 
         initViews()
-    }
-
-    /**
-     * Step 4
-     * Prepare VideoRangeList to start export.
-     * It requires playFromMs and playToMs arguments to be set when creating the VideoRecordRange object.
-     * Code below uses a range from 0 to video length for each video.
-     */
-    private fun prepareVideoRages(videosUri: List<Uri>): VideoRangeList {
-        val videoRecords = videosUri.map { fileUri ->
-            val videoDuration = DurationExtractor().extractDurationMilliSec(this, fileUri)
-            val videoSpeed = 1f
-            VideoRecordRange(
-                sourceUri = fileUri,            //mandatory, uri of video file
-                durationMs = videoDuration,     //mandatory, duration of video
-                speed = videoSpeed,             //mandatory, video playback speed
-                playFromMs = 0,                 //optional, by default equals 0
-                playToMs = videoDuration,       //optional, by default equals duration of video,
-                rotation = Rotation.ROTATION_0,  //optional, by default ROTATION_0
-                type = VideoSourceType.GALLERY  //mandatory, type of video source (gallery, camera, slideshow)
-            )
-        }
-        return VideoRangeList(videoRecords)
-    }
-
-    // Step 5
-    // Start Export flow!
-    private fun startExportFlow(videosUri: List<Uri>) {
-        val videoRanges = prepareVideoRages(videosUri)
-
-        val totalVideoDuration = videoRanges.data.sumOf { it.durationMs }
-
-        val effects = ExportEffectsProvider().provideEffects(applicationContext, totalVideoDuration)
-
-        val coverFrameSize = Size(720, 1280)
-
-        val exportTaskParams = ExportTaskParams(
-            videoRanges = videoRanges,
-            effects = effects,
-            musicEffects = emptyList(),
-            videoVolume = 1F,
-            coverFrameSize = coverFrameSize,
-            aspect = aspectRatioProvider.provide()        //by default provided aspect ratio = 9.0 / 16
-        )
-
-        if (isBackgroundExport) {
-            backgroundExportFlowManager.startExport(exportTaskParams)
-        } else {
-            foregroundExportFlowManager.startExport(exportTaskParams)
-        }
     }
 
     /**
@@ -160,37 +111,23 @@ class ExportActivity : AppCompatActivity() {
      */
     private fun initViews() {
         binding.backgroundExportBtn.setOnClickListener {
-            pickPredefinedVideos(true)
-        }
-
-        binding.foregroundExportBtn.setOnClickListener {
             pickPredefinedVideos(false)
         }
 
+        binding.foregroundExportBtn.setOnClickListener {
+            pickPredefinedVideos(true)
+        }
+
         binding.stopExportBtn.setOnClickListener {
-            if (isBackgroundExport) {
-                backgroundExportFlowManager.stopExport(ExportStopReason.CANCEL)
-            } else {
-                foregroundExportFlowManager.stopExport(ExportStopReason.CANCEL)
-            }
+            viewModel.stopExport()
         }
     }
 
-    private fun pickPredefinedVideos(isBackground: Boolean) {
+    private fun pickPredefinedVideos(inForeground: Boolean) {
         binding.previewImageView.setImageURI(null)
-        isBackgroundExport = isBackground
+        runExportInForeground = inForeground
 
         pickSampleVideos.launch("video/*")
-    }
-
-    private val pickSampleVideos = registerForActivityResult(
-        ActivityResultContracts.GetMultipleContents()
-    ) { videosUri ->
-        if (videosUri.isNullOrEmpty()) return@registerForActivityResult
-
-        showProgress(true)
-
-        startExportFlow(videosUri)
     }
 
     private fun showToast(message: String) {
@@ -198,7 +135,7 @@ class ExportActivity : AppCompatActivity() {
     }
 
     private fun showProgress(isExporting: Boolean) {
-        if (!isBackgroundExport) {
+        if (!runExportInForeground) {
             binding.exportProgressView.isVisible = isExporting
         }
         binding.backgroundExportBtn.isEnabled = !isExporting
@@ -207,6 +144,14 @@ class ExportActivity : AppCompatActivity() {
 
     private fun allowPlayingVideo(flag: Boolean) {
         binding.playViewButton.visibility = if (flag) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+    }
+
+    private fun allowStop(flag: Boolean) {
+        binding.stopExportBtn.visibility = if (flag) {
             View.VISIBLE
         } else {
             View.GONE
