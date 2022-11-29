@@ -29,8 +29,6 @@ class ExportActivity : AppCompatActivity() {
         const val TAG = "ExportSample"
     }
 
-    private var runExportInForeground = true
-
     private val viewModel by viewModel<ExportViewModel>()
 
     // Create result observer - all export execution results are delivered here.
@@ -90,7 +88,7 @@ class ExportActivity : AppCompatActivity() {
 
         showProgress(true)
 
-        viewModel.startExport(videosUri, runExportInForeground)
+        viewModel.startExportVideoSample(videosUri, isForegroundMode())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,24 +108,18 @@ class ExportActivity : AppCompatActivity() {
      * Sample specific code.
      */
     private fun initViews() {
-        binding.backgroundExportBtn.setOnClickListener {
-            pickPredefinedVideos(false)
-        }
-
-        binding.foregroundExportBtn.setOnClickListener {
-            pickPredefinedVideos(true)
+        binding.startExportButton.setOnClickListener {
+            binding.previewImageView.setImageURI(null)
+            pickSampleVideos.launch("video/*")
         }
 
         binding.stopExportBtn.setOnClickListener {
             viewModel.stopExport()
         }
-    }
 
-    private fun pickPredefinedVideos(inForeground: Boolean) {
-        binding.previewImageView.setImageURI(null)
-        runExportInForeground = inForeground
-
-        pickSampleVideos.launch("video/*")
+        binding.startSlideshowExportBtn.setOnClickListener {
+            viewModel.startSlideshowVideoSample(true)
+        }
     }
 
     private fun showToast(message: String) {
@@ -135,11 +127,9 @@ class ExportActivity : AppCompatActivity() {
     }
 
     private fun showProgress(isExporting: Boolean) {
-        if (!runExportInForeground) {
-            binding.exportProgressView.isVisible = isExporting
-        }
-        binding.backgroundExportBtn.isEnabled = !isExporting
-        binding.foregroundExportBtn.isEnabled = !isExporting
+        binding.exportProgressView.isVisible = isExporting
+        binding.startExportButton.isEnabled = !isExporting
+        binding.foregroundModeSwitch.isEnabled = !isExporting
     }
 
     private fun allowPlayingVideo(flag: Boolean) {
@@ -170,4 +160,6 @@ class ExportActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
+
+    private fun isForegroundMode(): Boolean = binding.foregroundModeSwitch.isChecked
 }

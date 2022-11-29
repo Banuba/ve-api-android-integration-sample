@@ -63,7 +63,9 @@ private class VideoEditorApiModule {
                 appContext = androidApplication(),
                 backgroundExportFlowManager = get(named("backgroundExportFlowManager")),
                 foregroundExportFlowManager = get(named("foregroundExportFlowManager")),
-                aspectRatioProvider = get()
+                aspectRatioProvider = get(),
+                exportDir = get(named("exportDir")),
+                mediaFileNameHelper = get()
             )
         }
 
