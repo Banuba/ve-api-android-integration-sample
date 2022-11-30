@@ -45,7 +45,6 @@ class BanubaVideoEditorSDK {
 private class VideoEditorApiModule {
 
     val module = module {
-
         viewModel {
             EditorViewModel(
                 appContext = androidApplication(),

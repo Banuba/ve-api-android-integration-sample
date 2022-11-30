@@ -45,7 +45,7 @@ class CustomExportParamsProvider(
         val exportVideoFileName = "exported_video"
 
         val paramsHdWithWatermark =
-            ExportParams.Builder(VideoResolution.Exact.HD)
+            ExportParams.Builder(VideoResolution.Exact.HD) // Video Quality resolution
                 .effects(effects.withWatermark(watermarkBuilder, WatermarkAlignment.BottomRight(marginRightPx = 16.toPx)))
                 .fileName(exportVideoFileName)
                 .debugEnabled(true)
