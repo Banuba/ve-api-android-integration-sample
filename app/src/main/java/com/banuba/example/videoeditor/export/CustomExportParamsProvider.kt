@@ -29,7 +29,7 @@ class CustomExportParamsProvider(
         videoVolume: Float
     ): List<ExportParams> {
         val exportSessionDir = exportDir.toFile().apply {
-            deleteRecursively()
+            // Export dir must be created
             mkdirs()
         }
 
@@ -37,12 +37,17 @@ class CustomExportParamsProvider(
             Uri.parse(exportSessionDir.toString()).buildUpon()
                 .appendPath(mediaFileNameHelper.generateExportSoundtrackFileName())
                 .build()
-        } else Uri.EMPTY
+        } else {
+            Uri.EMPTY
+        }
+
+        // Specify name for your exported video. Do not use ext i.e. .mp4
+        val exportVideoFileName = "exported_video"
 
         val paramsHdWithWatermark =
-            ExportParams.Builder(VideoResolution.Exact.HD)
+            ExportParams.Builder(VideoResolution.Exact.HD) // Video Quality resolution
                 .effects(effects.withWatermark(watermarkBuilder, WatermarkAlignment.BottomRight(marginRightPx = 16.toPx)))
-                .fileName("export_default")
+                .fileName(exportVideoFileName)
                 .debugEnabled(true)
                 .videoRangeList(videoRangeList)
                 .destDir(exportSessionDir)

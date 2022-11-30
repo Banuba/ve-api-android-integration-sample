@@ -45,7 +45,6 @@ class BanubaVideoEditorSDK {
 private class VideoEditorApiModule {
 
     val module = module {
-
         viewModel {
             EditorViewModel(
                 appContext = androidApplication(),
@@ -63,7 +62,9 @@ private class VideoEditorApiModule {
                 appContext = androidApplication(),
                 backgroundExportFlowManager = get(named("backgroundExportFlowManager")),
                 foregroundExportFlowManager = get(named("foregroundExportFlowManager")),
-                aspectRatioProvider = get()
+                aspectRatioProvider = get(),
+                exportDir = get(named("exportDir")),
+                mediaFileNameHelper = get()
             )
         }
 

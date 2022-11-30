@@ -116,7 +116,7 @@ class ExportEffectsProvider {
      * Creates a text effect. The text is created using a canvas and converted to a bitmap.
      * RectParams are used to set the coordinates, size, scale and rotation of the effect.
      */
-    private fun createTextVisualEffect(): VisualTimedEffect {
+    fun createTextVisualEffect(): VisualTimedEffect {
         val bitmap = Bitmap.createBitmap(800, 150, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
