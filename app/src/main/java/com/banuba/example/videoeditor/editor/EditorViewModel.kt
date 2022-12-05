@@ -104,7 +104,12 @@ class EditorViewModel(
             val playlist = videos
                 .filter { videoValidator.getValidationResult(it) == MediaValidationResultType.VALID_FILE }
                 .mapNotNull {
-                    VideoEditorUtils.createVideoRecordRange(it, appContext)
+                    VideoEditorUtils
+                        .createVideoRecordRange(
+                            sourceUri = it,
+                            context =  appContext,
+                            pipApplied = false
+                        )
                 }
             videoPlayer.setVideoRanges(playlist)
             exportVideosList.addAll(playlist)
