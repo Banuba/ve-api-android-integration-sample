@@ -16,10 +16,7 @@ import com.banuba.example.videoeditor.export.CustomEffectDrawable
 import com.banuba.sdk.core.data.MediaDataGalleryValidator
 import com.banuba.sdk.core.data.MediaValidationResultType
 import com.banuba.sdk.core.domain.AspectRatioProvider
-import com.banuba.sdk.core.effects.DrawType
-import com.banuba.sdk.core.effects.EqualizerEffect
-import com.banuba.sdk.core.effects.RectParams
-import com.banuba.sdk.core.effects.VisualEffectDrawable
+import com.banuba.sdk.core.effects.*
 import com.banuba.sdk.core.ext.copyFromAssetsToExternal
 import com.banuba.sdk.core.gl.GlViewport
 import com.banuba.sdk.core.media.DurationExtractor
@@ -394,6 +391,7 @@ class EditorViewModel(
         override val normalSpeedEffectDurationMs: Long,
         override val volume: Float,
         override val playUri: Uri,
-        override val equalizerEffect: EqualizerEffect?
+        override val equalizerEffect: EqualizerEffect?,
+        override val fadeEffect: FadeEffect = FadeEffect.EMPTY
     ) : MusicEffect
 }
