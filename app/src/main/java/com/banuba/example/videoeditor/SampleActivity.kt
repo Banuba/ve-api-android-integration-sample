@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.banuba.example.videoeditor.camera.CameraActivity
 import com.banuba.example.videoeditor.databinding.ActivitySampleBinding
 import com.banuba.example.videoeditor.export.ExportActivity
+import com.banuba.example.videoeditor.playback.PlaybackActivity
 
 class SampleActivity : AppCompatActivity() {
 
@@ -23,6 +24,10 @@ class SampleActivity : AppCompatActivity() {
 
         binding.startExportFlowButton.setOnClickListener {
             startActivity(Intent(applicationContext, ExportActivity::class.java))
+        }
+
+        binding.startPlaybackFlowButton.setOnClickListener {
+            startActivity(Intent(applicationContext, PlaybackActivity::class.java))
         }
     }
 }

@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import com.banuba.example.videoeditor.editor.EditorViewModel
 import com.banuba.example.videoeditor.export.CustomExportParamsProvider
 import com.banuba.example.videoeditor.export.ExportViewModel
+import com.banuba.example.videoeditor.playback.PlaybackViewModel
 import com.banuba.example.videoeditor.utils.CustomPublishManager
 import com.banuba.example.videoeditor.utils.StubImageLoader
 import com.banuba.sdk.core.domain.ImageLoader
@@ -65,6 +66,16 @@ private class VideoEditorApiModule {
                 aspectRatioProvider = get(),
                 exportDir = get(named("exportDir")),
                 mediaFileNameHelper = get()
+            )
+        }
+
+        viewModel {
+            PlaybackViewModel(
+                context = androidContext(),
+                videoValidator = VideoGalleryResourceValidator(
+                    context = androidContext()
+                ),
+                videoPlayer = get()
             )
         }
 

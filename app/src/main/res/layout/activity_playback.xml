@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".playback.PlaybackActivity">
+
+    <SurfaceView
+        android:id="@+id/videoPlayerSurfaceView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toTopOf="@id/horizontalMidGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalMidGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.appcompat.widget.AppCompatSeekBar
+        android:id="@+id/videoPlayerSeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/videoPlayerSurfaceView"
+        app:layout_constraintStart_toStartOf="@id/videoPlayerSurfaceView"
+        app:layout_constraintTop_toBottomOf="@id/horizontalMidGuideline" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/videoPlaybackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/videoPlayerSeekBar"
+        app:srcCompat="@drawable/selector_playback_btn" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/videoRewindBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        app:layout_constraintStart_toEndOf="@id/videoPlaybackBtn"
+        app:layout_constraintTop_toBottomOf="@id/videoPlayerSeekBar"
+        app:srcCompat="@drawable/ic_rewind" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/videoVolumeImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        app:layout_constraintStart_toEndOf="@id/videoRewindBtn"
+        app:layout_constraintTop_toBottomOf="@id/videoPlayerSeekBar"
+        app:srcCompat="@drawable/ic_volume" />
+
+    <androidx.appcompat.widget.AppCompatSeekBar
+        android:id="@+id/videoPlayerVolumeSeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/videoVolumeImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/videoVolumeImageView"
+        app:layout_constraintTop_toTopOf="@id/videoVolumeImageView" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalMidGuideline"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/videoPlaybackEffects"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:chipSpacing="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/videoPlaybackBtn">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/fxEffectCheckBox"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:padding="8dp"
+            android:text="Fx Effect" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/speedEffectCheckBox"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:padding="8dp"
+            android:text="Speed Effect" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/textEffectCheckBox"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:padding="8dp"
+            android:text="Text Effect" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/lutEffectCheckBox"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:padding="8dp"
+            android:text="Lut Effect" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/gifEffectCheckBox"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:padding="8dp"
+            android:text="Gif Effect" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/musicEffectCheckBox"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:padding="8dp"
+            android:text="Music Effect" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/customEffectCheckBox"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:padding="8dp"
+            android:text="Custom Effect" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/videoPlayerSelectVideos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_video_library"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/videoPlayerMakeScreenshot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_screenshot"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/videoPlayerSelectVideos" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/screenshotCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/screenshotImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
