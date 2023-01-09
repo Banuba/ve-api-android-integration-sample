@@ -14,7 +14,6 @@ import com.banuba.sdk.export.data.*
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
 import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
-import com.banuba.sdk.token.storage.provider.TokenProvider
 import com.banuba.sdk.ve.di.VeSdkKoinModule
 import com.banuba.sdk.ve.effects.watermark.WatermarkProvider
 import com.banuba.sdk.ve.media.VideoGalleryResourceValidator
@@ -77,13 +76,6 @@ private class VideoEditorApiModule {
                 ),
                 videoPlayer = get()
             )
-        }
-
-        single<TokenProvider>(named("banubaTokenProvider")) {
-            object : TokenProvider {
-                override fun getToken(): String =
-                    androidContext().getString(R.string.banuba_token)
-            }
         }
 
         single<ExportFlowManager> {

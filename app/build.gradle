@@ -47,7 +47,7 @@ dependencies {
 
 
     // Banuba Face AR SDK dependencies
-    def banubaSdkVersion = '1.26.2'
+    def banubaSdkVersion = '1.26.3'
     implementation "com.banuba.sdk:ffmpeg:4.4"
     implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
@@ -58,7 +58,7 @@ dependencies {
     // contains Visual and Time effects
     implementation "com.banuba.sdk:ve-effects-sdk:${banubaSdkVersion}"
 
-    implementation 'com.banuba.sdk:effect-player:1.5.0'
+    implementation 'com.banuba.sdk:effect-player:1.5.3.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

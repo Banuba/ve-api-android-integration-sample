@@ -24,8 +24,6 @@ import com.banuba.sdk.camera.Facing
 import com.banuba.sdk.entity.RecordedVideoInfo
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.manager.IEventCallback
-import com.banuba.sdk.token.storage.license.EditorLicenseManager
-import com.banuba.sdk.token.storage.provider.TokenProvider
 import com.banuba.sdk.types.Data
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,8 +59,6 @@ class CameraActivity : AppCompatActivity() {
     private var videosStack = ArrayDeque<Uri>()
 
     private lateinit var binding: ActivityCameraBinding
-
-    private val tokenProvider: TokenProvider by inject(named("banubaTokenProvider"))
 
     private val cameraEventCallback = object : IEventCallback {
         override fun onCameraOpenError(p0: Throwable) {
@@ -310,15 +306,8 @@ class CameraActivity : AppCompatActivity() {
 
     private fun openEditor(videos: List<Uri>) {
         destroyFaceAr()
-        initializeEditor()
         val intent = EditorActivity.createIntent(this, videos)
         startActivity(intent)
-    }
-
-    private fun initializeEditor() {
-        CoroutineScope(Dispatchers.Main.immediate).launch {
-            EditorLicenseManager.initialize(tokenProvider.getToken())
-        }
     }
 
     private fun getTimeBasedFileName(): String {
