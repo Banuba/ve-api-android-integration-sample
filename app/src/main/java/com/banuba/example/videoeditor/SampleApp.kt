@@ -8,13 +8,12 @@ class SampleApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        BanubaVideoEditorSDK().initialize(this@SampleApp)
-
         val videoEditorSDK = BanubaVideoEditor.initialize(getString(R.string.banuba_token))
 
         if (videoEditorSDK == null) {
             Log.e("BanubaVideoEditor", "BanubaVideoEditor initialization error")
         } else {
+            BanubaVideoEditorSDK().initialize(this@SampleApp)
             videoEditorSDK.getLicenseState { isValid ->
                 if (isValid) {
                     Log.d("BanubaVideoEditor", "BanubaVideoEditor token is valid")
