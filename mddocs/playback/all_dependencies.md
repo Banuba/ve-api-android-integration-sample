@@ -7,7 +7,6 @@
 | androidx.lifecycle:lifecycle-livedata-ktx | 2.4.1 |
 | androidx.lifecycle:lifecycle-viewmodel-ktx | 2.4.1 |
 | com.google.android.exoplayer:exoplayer | 2.16.0 |
-| com.google.firebase:firebase-database-ktx | 20.0.0 |
 | com.squareup.okhttp3:okhttp | 4.9.1 |
 | io.insert-koin:koin-android | 3.2.0 |
 | org.apache.commons:commons-math3 | 3.6.1 |

@@ -4,7 +4,7 @@
 Add Video Editor API dependencies in [app/build.gradle](app/build.gradle) file.
 
 ``` groovy
-  def banubaSdkVersion = '1.25.0'
+  def banubaSdkVersion = '1.26.3'
   implementation "com.banuba.sdk:ffmpeg:4.4"
   implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
@@ -14,7 +14,7 @@ Add Video Editor API dependencies in [app/build.gradle](app/build.gradle) file.
   implementation "com.banuba.sdk:ve-effects-sdk:${banubaSdkVersion}"
   
   // Only if you use Banuba Face AR
-  implementation 'com.banuba.sdk:effect-player:1.5.0'
+  implementation 'com.banuba.sdk:effect-player:1.5.3.1'
 ```
 
 :exclamation: __Important__  

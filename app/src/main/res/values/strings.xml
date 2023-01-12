@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name">ve-api-android-integration-sample</string>
-    <string name="banuba_token"><!-- PUT VIDEO EDITOR TOKEN HERE --></string>
+    <string name="app_name">Banuba Video Editor API Sample</string>
 </resources>
