@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import com.banuba.example.videoeditor.R
+import com.banuba.example.videoeditor.SampleApp
 import com.banuba.example.videoeditor.databinding.ActivityCameraBinding
 import com.banuba.example.videoeditor.editor.EditorActivity
 import com.banuba.example.videoeditor.utils.GetMultipleContents
@@ -242,7 +243,7 @@ class CameraActivity : AppCompatActivity() {
 
     private fun initializeFaceAr() {
         BanubaSdkManager.deinitialize()
-        BanubaSdkManager.initialize(applicationContext, getString(R.string.banuba_token))
+        BanubaSdkManager.initialize(applicationContext, SampleApp.LICENSE_TOKEN)
         banubaSdkManager = BanubaSdkManager(applicationContext)
         banubaSdkManager?.setCallback(cameraEventCallback)
     }

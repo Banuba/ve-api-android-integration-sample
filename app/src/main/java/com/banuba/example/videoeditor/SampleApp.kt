@@ -10,6 +10,9 @@ class SampleApp : Application() {
 
     companion object {
         const val TAG = "BanubaVideoEditor"
+
+        val LICENSE_TOKEN = SET YOUR LICENSE TOKEN
+
         const val ERR_SDK_NOT_INITIALIZED = "Banuba Video Editor SDK is not initialized: license token is unknown or incorrect.\nPlease check your license token or contact Banuba"
         const val ERR_LICENSE_REVOKED = "License is revoked or expired. Please contact Banuba https://www.banuba.com/faq/kb-tickets/new"
     }
@@ -17,7 +20,7 @@ class SampleApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        videoEditor = BanubaVideoEditor.initialize(getString(R.string.banuba_token))
+        videoEditor = BanubaVideoEditor.initialize(LICENSE_TOKEN)
 
         if (videoEditor == null) {
             // Token you provided is not correct - empty or truncated
