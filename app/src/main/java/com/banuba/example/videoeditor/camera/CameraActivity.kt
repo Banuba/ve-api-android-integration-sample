@@ -193,7 +193,6 @@ class CameraActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         destroyFaceAr()
-        stopKoin()
     }
 
     override fun onRequestPermissionsResult(
