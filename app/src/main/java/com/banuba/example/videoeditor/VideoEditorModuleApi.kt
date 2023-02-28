@@ -3,12 +3,13 @@ package com.banuba.example.videoeditor
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.banuba.example.videoeditor.editor.EditorViewModel
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.widget.ImageView
 import com.banuba.example.videoeditor.export.CustomExportParamsProvider
 import com.banuba.example.videoeditor.export.ExportViewModel
 import com.banuba.example.videoeditor.playback.PlaybackViewModel
 import com.banuba.example.videoeditor.utils.CustomPublishManager
-import com.banuba.example.videoeditor.utils.StubImageLoader
 import com.banuba.sdk.core.domain.ImageLoader
 import com.banuba.sdk.export.data.*
 import com.banuba.sdk.export.di.VeExportKoinModule
@@ -45,18 +46,6 @@ class BanubaVideoEditorSDK {
 private class VideoEditorApiModule {
 
     val module = module {
-        viewModel {
-            EditorViewModel(
-                appContext = androidApplication(),
-                videoValidator = VideoGalleryResourceValidator(
-                    context = androidContext()
-                ),
-                videoPlayer = get(),
-                exportFlowManager = get(),
-                aspectRatioProvider = get()
-            )
-        }
-
         viewModel {
             ExportViewModel(
                 appContext = androidApplication(),
@@ -115,10 +104,6 @@ private class VideoEditorApiModule {
                 mediaFileNameHelper = get(),
                 dispatcher = Dispatchers.IO
             )
-        }
-
-        single<ImageLoader> {
-            StubImageLoader()
         }
 
         /**

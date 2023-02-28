@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.banuba.example.videoeditor.camera.CameraActivity
 import com.banuba.example.videoeditor.databinding.ActivitySampleBinding
 import com.banuba.example.videoeditor.export.ExportActivity
 import com.banuba.example.videoeditor.playback.PlaybackActivity
@@ -20,19 +19,13 @@ class SampleActivity : AppCompatActivity() {
         binding = ActivitySampleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.startMainFlowButton.setOnClickListener {
-            checkVideoEditorLicenseState {
-                startActivity(Intent(applicationContext, CameraActivity::class.java))
-            }
-        }
-
-        binding.startExportFlowButton.setOnClickListener {
+        binding.exportSampleButton.setOnClickListener {
             checkVideoEditorLicenseState {
                 startActivity(Intent(applicationContext, ExportActivity::class.java))
             }
         }
 
-        binding.startPlaybackFlowButton.setOnClickListener {
+        binding.playbackSampleButton.setOnClickListener {
             checkVideoEditorLicenseState {
                 startActivity(Intent(applicationContext, PlaybackActivity::class.java))
             }

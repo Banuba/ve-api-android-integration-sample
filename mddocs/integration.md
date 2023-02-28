@@ -4,8 +4,8 @@
 Add Video Editor API dependencies in [app/build.gradle](app/build.gradle) file.
 
 ``` groovy
-  def banubaSdkVersion = '1.26.3'
-  implementation "com.banuba.sdk:ffmpeg:4.4"
+  def banubaSdkVersion = '1.26.5.1'
+  implementation "com.banuba.sdk:ffmpeg:5.1.3"
   implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
@@ -17,19 +17,13 @@ Add Video Editor API dependencies in [app/build.gradle](app/build.gradle) file.
   implementation 'com.banuba.sdk:effect-player:1.5.3.1'
 ```
 
-:exclamation: __Important__  
-Project **libs** directory contains `banuba_sdk-release.aar` for integrating Camera functionality into this sample 
-to demonstrate an optional flow where the user starts from camera and can navigate to the next screens where 
-actual Video Editor API is integrated.  
-You can omit this flow and Camera functionality as well.  
-
 ### Supported media formats
 | Audio      | Video      |
 | ---------- | ---------  | 
 |mp3, aac, wav, m4a, flac, aiff |mp4, mov, m4v|
 
-### API features
-Video Editor API includes
+### API modules
+Video Editor API includes 2 main modules
 - Playback API
 - Export API
 

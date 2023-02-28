@@ -10,11 +10,12 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.banuba.example.videoeditor.editor.EditorViewModel
 import com.banuba.sdk.core.CoroutineDispatcherProvider
 import com.banuba.sdk.core.Rotation
 import com.banuba.sdk.core.domain.AspectRatioProvider
 import com.banuba.sdk.core.domain.VideoSourceType
+import com.banuba.sdk.core.effects.EqualizerEffect
+import com.banuba.sdk.core.effects.FadeEffect
 import com.banuba.sdk.core.ext.copyFromAssetsToExternal
 import com.banuba.sdk.core.media.DurationExtractor
 import com.banuba.sdk.core.media.MediaFileNameHelper
@@ -25,6 +26,7 @@ import com.banuba.sdk.ve.domain.VideoRangeList
 import com.banuba.sdk.ve.domain.VideoRecordRange
 import com.banuba.sdk.ve.effects.Effects
 import com.banuba.sdk.ve.effects.VisualTimedEffect
+import com.banuba.sdk.ve.effects.music.MusicEffect
 import com.banuba.sdk.ve.slideshow.SlideShowSource
 import com.banuba.sdk.ve.slideshow.SlideShowTask
 import kotlinx.coroutines.launch
@@ -138,7 +140,7 @@ class ExportViewModel(
             // Specify audio in video
             val audioUri = context.copyFromAssetsToExternal("sample_audio.mp3").toUri()
 
-            val musicEffect = EditorViewModel.PlaybackMusicEffect(
+            val musicEffect = PlaybackMusicEffect(
                 uuid = ParcelUuid(UUID.randomUUID()),
                 sourceUri = audioUri,
                 playUri = audioUri,
@@ -226,4 +228,17 @@ class ExportViewModel(
         }
         return VideoRangeList(videoRecords)
     }
+
+    data class PlaybackMusicEffect(
+        override val uuid: ParcelUuid,
+        override val sourceUri: Uri,
+        override val startOnTimelineMs: Long,
+        override val startOnSourceMs: Long,
+        override val effectDurationMs: Long,
+        override val normalSpeedEffectDurationMs: Long,
+        override val volume: Float,
+        override val playUri: Uri,
+        override val equalizerEffect: EqualizerEffect?,
+        override val fadeEffect: FadeEffect = FadeEffect.EMPTY
+    ) : MusicEffect
 }
