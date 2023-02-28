@@ -22,8 +22,18 @@ class PlaybackActivity : AppCompatActivity() {
 
     private val selectVideos = registerForActivityResult(GetMultipleContents()) {
         val predefinedVideos = it.toTypedArray()
-        if (predefinedVideos.isNotEmpty()) {
+        val hasVideoContent = predefinedVideos.isNotEmpty()
+
+        if (hasVideoContent) {
+            binding.playbackContainer.visibility = View.VISIBLE
+            binding.pickVideoButton.visibility = View.GONE
+
             viewModel.addVideosToPlayback(predefinedVideos)
+        } else {
+            showToast("Please pick video content to proceed")
+
+            binding.playbackContainer.visibility = View.GONE
+            binding.pickVideoButton.visibility = View.VISIBLE
         }
     }
 
@@ -41,11 +51,11 @@ class PlaybackActivity : AppCompatActivity() {
         binding = ActivityPlaybackBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.videoPlayerSelectVideos.setOnClickListener {
+        binding.pickVideoButton.setOnClickListener {
             selectVideos.launch("video/*")
         }
 
-        binding.videoPlayerMakeScreenshot.setOnClickListener {
+        binding.takeScreenShotButton.setOnClickListener {
             viewModel.takeScreenshot()
         }
 
@@ -64,6 +74,7 @@ class PlaybackActivity : AppCompatActivity() {
 
         binding.fxEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
+                showToast("Applied Visual FX effect")
                 viewModel.applyFxEffect()
             } else {
                 viewModel.removeFxEffect()
@@ -72,6 +83,7 @@ class PlaybackActivity : AppCompatActivity() {
 
         binding.maskEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
+                showToast("Applied AR effect")
                 viewModel.applyMaskEffect(MASK_EFFECT_NAME)
             } else {
                 viewModel.removeMaskEffect()
@@ -80,6 +92,7 @@ class PlaybackActivity : AppCompatActivity() {
 
         binding.textEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
+                showToast("Applied Text effect")
                 viewModel.applyTextEffect()
             } else {
                 viewModel.removeTextEffect()
@@ -88,6 +101,7 @@ class PlaybackActivity : AppCompatActivity() {
 
         binding.gifEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
+                showToast("Applied Sticker effect")
                 viewModel.applyGifEffect()
             } else {
                 viewModel.removeGifEffect()
@@ -96,6 +110,7 @@ class PlaybackActivity : AppCompatActivity() {
 
         binding.speedEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
+                showToast("Applied Speed effect")
                 viewModel.applySpeedEffect()
             } else {
                 viewModel.removeSpeedEffect()
@@ -104,6 +119,7 @@ class PlaybackActivity : AppCompatActivity() {
 
         binding.lutEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
+                showToast("Applied Color effect")
                 viewModel.applyLutEffect()
             } else {
                 viewModel.removeLutEffect()
@@ -120,6 +136,7 @@ class PlaybackActivity : AppCompatActivity() {
 
         binding.customEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
+                showToast("Applied Custom effect")
                 viewModel.applyCustomEffect()
             } else {
                 viewModel.remoteCustomEffect()
@@ -127,7 +144,6 @@ class PlaybackActivity : AppCompatActivity() {
         }
 
         binding.videoPlayerSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-
             override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     viewModel.seekTo(progress)
@@ -155,8 +171,8 @@ class PlaybackActivity : AppCompatActivity() {
             binding.screenshotCardView.visibility = View.GONE
         }
 
-        viewModel.errorMsg.observe(this) {
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        viewModel.errorMsg.observe(this) { message ->
+            showToast(message)
         }
 
         viewModel.totalDuration.observe(this) { totalDuration ->
@@ -173,7 +189,6 @@ class PlaybackActivity : AppCompatActivity() {
         }
 
         viewModel.prepare(binding.videoPlayerSurfaceView.holder)
-
     }
 
     override fun onStop() {
@@ -187,5 +202,7 @@ class PlaybackActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-
+    private fun showToast(message: String) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
 }
