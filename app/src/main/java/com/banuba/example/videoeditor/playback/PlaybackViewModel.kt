@@ -16,6 +16,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.banuba.example.videoeditor.export.CustomEffectDrawable
+import com.banuba.example.videoeditor.utils.BanubaEffectHelper
 import com.banuba.sdk.core.data.MediaDataGalleryValidator
 import com.banuba.sdk.core.data.MediaValidationResultType
 import com.banuba.sdk.core.effects.DrawType
@@ -203,6 +204,23 @@ class PlaybackViewModel(
 
     fun removeFxEffect() {
         appliedEffects.removeAll { it.drawable.type == DrawType.VISUAL }
+        videoPlayer.setEffects(appliedEffects)
+    }
+
+    fun applyMaskEffect(effectName: String) {
+        // Any AR effect (mask) should be prepared before applying.
+        // Prepare means - download if needed and copied into local device storage.
+        val preparedMaskEffect = BanubaEffectHelper(context).prepareEffect(effectName)
+
+        val timedEffect = VisualTimedEffect(
+            effectDrawable = VideoEffectsHelper.createMaskEffect(preparedMaskEffect.uri)
+        )
+        appliedEffects.add(timedEffect)
+        videoPlayer.setEffects(appliedEffects)
+    }
+
+    fun removeMaskEffect() {
+        appliedEffects.removeAll { it.drawable.type == DrawType.MASK }
         videoPlayer.setEffects(appliedEffects)
     }
 

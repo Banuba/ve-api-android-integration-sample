@@ -6,13 +6,15 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.banuba.example.videoeditor.R
-import com.banuba.example.videoeditor.databinding.ActivityExportBinding
 import com.banuba.example.videoeditor.databinding.ActivityPlaybackBinding
 import com.banuba.example.videoeditor.utils.GetMultipleContents
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaybackActivity : AppCompatActivity() {
+
+    companion object {
+        private const val MASK_EFFECT_NAME = "AsaiLines"
+    }
 
     private val viewModel by viewModel<PlaybackViewModel>()
 
@@ -65,6 +67,14 @@ class PlaybackActivity : AppCompatActivity() {
                 viewModel.applyFxEffect()
             } else {
                 viewModel.removeFxEffect()
+            }
+        }
+
+        binding.maskEffectCheckBox.setOnCheckedChangeListener { _, checked ->
+            if (checked) {
+                viewModel.applyMaskEffect(MASK_EFFECT_NAME)
+            } else {
+                viewModel.removeMaskEffect()
             }
         }
 

@@ -52,10 +52,14 @@ dependencies {
     implementation "com.banuba.sdk:ve-playback-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:ve-export-sdk:${banubaSdkVersion}"
 
+    // Please use this dependency for applying Face AR effects(masks) in Video Editor.
+    // This dependency replaces Face AR 'com.banuba.sdk:effect-player:***' dependency that you
+    // might use for building camera experience with Face AR.
+    // Just one effect player dependency can be used
+    implementation "com.banuba.sdk:effect-player-adapter:${banubaSdkVersion}"
+
     // contains Visual and Time effects
     implementation "com.banuba.sdk:ve-effects-sdk:${banubaSdkVersion}"
-
-    implementation 'com.banuba.sdk:effect-player:1.5.3.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

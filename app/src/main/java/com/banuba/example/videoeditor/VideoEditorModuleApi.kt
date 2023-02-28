@@ -11,6 +11,7 @@ import com.banuba.example.videoeditor.export.ExportViewModel
 import com.banuba.example.videoeditor.playback.PlaybackViewModel
 import com.banuba.example.videoeditor.utils.CustomPublishManager
 import com.banuba.sdk.core.domain.ImageLoader
+import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule
 import com.banuba.sdk.export.data.*
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
@@ -37,6 +38,8 @@ class BanubaVideoEditorSDK {
                 VeExportKoinModule().module,
                 VePlaybackSdkKoinModule().module,
                 TokenStorageKoinModule().module,
+                // Module is required for applying Face AR masks
+                BanubaEffectPlayerKoinModule().module,
                 VideoEditorApiModule().module
             )
         }
