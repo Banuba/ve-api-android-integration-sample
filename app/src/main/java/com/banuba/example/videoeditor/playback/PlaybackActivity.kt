@@ -186,6 +186,9 @@ class PlaybackActivity : AppCompatActivity() {
             binding.screenshotCardView.visibility = View.GONE
         }
 
+        binding.seekForwardButton.setOnClickListener { viewModel.seekForward() }
+        binding.seekBackwardButton.setOnClickListener { viewModel.seekBackward() }
+
         viewModel.errorMessageData.observe(this) { message ->
             showToast(message)
         }

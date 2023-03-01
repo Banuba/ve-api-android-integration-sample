@@ -54,7 +54,7 @@
             android:id="@+id/videoPlaybackBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="24dp"
+            android:padding="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/videoPlayerSeekBar"
             app:srcCompat="@drawable/selector_playback_btn" />
@@ -63,17 +63,39 @@
             android:id="@+id/videoRewindBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="24dp"
+            android:padding="8dp"
             app:layout_constraintStart_toEndOf="@id/videoPlaybackBtn"
             app:layout_constraintTop_toBottomOf="@id/videoPlayerSeekBar"
             app:srcCompat="@drawable/ic_rewind" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/seekForwardButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple_500"
+            android:text="+1 sec"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toEndOf="@id/videoRewindBtn"
+            app:layout_constraintTop_toBottomOf="@id/videoPlayerSeekBar"
+            android:textSize="11sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/seekBackwardButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple_500"
+            android:text="-1 sec"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toEndOf="@id/seekForwardButton"
+            app:layout_constraintTop_toBottomOf="@id/videoPlayerSeekBar"
+            android:textSize="11sp" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/videoVolumeImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="24dp"
-            app:layout_constraintStart_toEndOf="@id/videoRewindBtn"
+            android:padding="8dp"
+            app:layout_constraintStart_toEndOf="@id/seekBackwardButton"
             app:layout_constraintTop_toBottomOf="@id/videoPlayerSeekBar"
             app:srcCompat="@drawable/ic_volume" />
 

@@ -37,6 +37,11 @@ class PlaybackViewModel(
     private val videoValidator: MediaDataGalleryValidator,
     private val videoPlayer: VideoPlayer
 ) : ViewModel() {
+
+    companion object {
+        private const val ONE_SECOND_MS = 1000
+    }
+
     // Defines currently playing position
     val playbackPositionData = MutableLiveData<Int>()
 
@@ -143,6 +148,20 @@ class PlaybackViewModel(
 
     fun seekTo(position: Int) {
         videoPlayer.seekTo(position)
+    }
+
+    fun seekForward() {
+        val current = playbackPositionData.value ?: 0
+
+        seekTo(current + ONE_SECOND_MS)
+    }
+
+    fun seekBackward() {
+        val current = playbackPositionData.value ?: 0
+
+        if (current == 0) return
+
+        seekTo(current - ONE_SECOND_MS)
     }
 
     fun setVolume(value: Float) {
