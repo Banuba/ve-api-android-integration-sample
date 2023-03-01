@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
+            app:layout_constraintGuide_percent="0.4" />
 
         <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/videoPlayerSeekBar"
@@ -124,14 +124,24 @@
                 android:text="Add FX effect" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/speedEffectCheckBox"
+                android:id="@+id/rapidEffectCheckBox"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkable="true"
                 android:padding="8dp"
                 android:textSize="12sp"
-                android:text="Add Speed effect" />
+                android:text="Add Rapid Speed effect" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/slowMotionEffectCheckBox"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:padding="8dp"
+                android:textSize="12sp"
+                android:text="Add Slow Motion Speed effect" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/textEffectCheckBox"

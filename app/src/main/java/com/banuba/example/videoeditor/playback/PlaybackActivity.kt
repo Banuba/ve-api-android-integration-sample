@@ -28,7 +28,7 @@ class PlaybackActivity : AppCompatActivity() {
             binding.playbackContainer.visibility = View.VISIBLE
             binding.pickVideoButton.visibility = View.GONE
 
-            viewModel.addVideosToPlayback(predefinedVideos)
+            viewModel.addVideoContent(predefinedVideos)
         } else {
             showToast("Please pick video content to proceed")
 
@@ -42,7 +42,7 @@ class PlaybackActivity : AppCompatActivity() {
             binding.musicEffectCheckBox.isChecked = false
             return@registerForActivityResult
         }
-        viewModel.addMusicToPlayback(it)
+        viewModel.addMusicTrack(it)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +75,7 @@ class PlaybackActivity : AppCompatActivity() {
         binding.fxEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 showToast("Applied Visual FX effect")
-                viewModel.applyFxEffect()
+                viewModel.addFxEffect()
             } else {
                 viewModel.removeFxEffect()
             }
@@ -84,7 +84,7 @@ class PlaybackActivity : AppCompatActivity() {
         binding.maskEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 showToast("Applied AR effect")
-                viewModel.applyMaskEffect(MASK_EFFECT_NAME)
+                viewModel.addMaskEffect(MASK_EFFECT_NAME)
             } else {
                 viewModel.removeMaskEffect()
             }
@@ -93,7 +93,7 @@ class PlaybackActivity : AppCompatActivity() {
         binding.textEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 showToast("Applied Text effect")
-                viewModel.applyTextEffect()
+                viewModel.addTextEffect()
             } else {
                 viewModel.removeTextEffect()
             }
@@ -102,16 +102,25 @@ class PlaybackActivity : AppCompatActivity() {
         binding.gifEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 showToast("Applied Sticker effect")
-                viewModel.applyGifEffect()
+                viewModel.addStickerEffect()
             } else {
                 viewModel.removeGifEffect()
             }
         }
 
-        binding.speedEffectCheckBox.setOnCheckedChangeListener { _, checked ->
+        binding.rapidEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
-                showToast("Applied Speed effect")
-                viewModel.applySpeedEffect()
+                showToast("Applied Rapid Speed effect")
+                viewModel.addRapidSpeedEffect()
+            } else {
+                viewModel.removeSpeedEffect()
+            }
+        }
+
+        binding.slowMotionEffectCheckBox.setOnCheckedChangeListener { _, checked ->
+            if (checked) {
+                showToast("Applied Slow Motion Speed effect")
+                viewModel.addSlowMotionSpeedEffect()
             } else {
                 viewModel.removeSpeedEffect()
             }
@@ -120,9 +129,9 @@ class PlaybackActivity : AppCompatActivity() {
         binding.lutEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 showToast("Applied Color effect")
-                viewModel.applyLutEffect()
+                viewModel.addColorEffect()
             } else {
-                viewModel.removeLutEffect()
+                viewModel.removeColorEffect()
             }
         }
 
@@ -130,14 +139,14 @@ class PlaybackActivity : AppCompatActivity() {
             if (checked) {
                 selectMusicTrack.launch("audio/*")
             } else {
-                viewModel.removeMusicEffect()
+                viewModel.removeMusicTrack()
             }
         }
 
         binding.customEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 showToast("Applied Custom effect")
-                viewModel.applyCustomEffect()
+                viewModel.addCustomEffect()
             } else {
                 viewModel.remoteCustomEffect()
             }
@@ -155,40 +164,46 @@ class PlaybackActivity : AppCompatActivity() {
         })
 
         binding.videoPlayerVolumeSeekBar.max = 100
+
         binding.videoPlayerVolumeSeekBar.progress = 100
+
         binding.videoPlayerVolumeSeekBar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
                 viewModel.setVolume(progress.toFloat() / 100)
             }
 
-            override fun onStartTrackingTouch(p0: SeekBar?) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(p0: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
         binding.screenshotCardView.setOnClickListener {
             binding.screenshotCardView.visibility = View.GONE
         }
 
-        viewModel.errorMsg.observe(this) { message ->
+        viewModel.errorMessageData.observe(this) { message ->
             showToast(message)
         }
 
-        viewModel.totalDuration.observe(this) { totalDuration ->
+        viewModel.totalDurationData.observe(this) { totalDuration ->
             binding.videoPlayerSeekBar.max = totalDuration
         }
 
-        viewModel.playbackPosition.observe(this) { position ->
+        viewModel.playbackPositionData.observe(this) { position ->
             binding.videoPlayerSeekBar.progress = position
         }
 
-        viewModel.screenshotBitmap.observe(this) { screenshot ->
+        viewModel.screenshotBitmapData.observe(this) { screenshot ->
             binding.screenshotImageView.setImageBitmap(screenshot)
             binding.screenshotCardView.visibility = View.VISIBLE
         }
 
-        viewModel.prepare(binding.videoPlayerSurfaceView.holder)
+        viewModel.preparePlayer(binding.videoPlayerSurfaceView.holder)
     }
 
     override fun onStop() {
