@@ -275,12 +275,12 @@ class PlaybackViewModel(
         removeEffectsByTypeInternal(DrawType.COLOR)
     }
 
-    fun addCustomEffect() {
-        val customEffect = SampleEffectsProvider.createCustomEffect(viewportSize)
+    fun addBlurEffect() {
+        val customEffect = SampleEffectsProvider.createBlurEffect(viewportSize)
         addEffectInternal(customEffect)
     }
 
-    fun remoteCustomEffect() {
+    fun remoteBlurEffect() {
         removeEffectsByTypeInternal(DrawType.CUSTOM)
     }
 

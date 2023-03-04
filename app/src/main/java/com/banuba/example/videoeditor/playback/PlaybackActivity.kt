@@ -143,12 +143,12 @@ class PlaybackActivity : AppCompatActivity() {
             }
         }
 
-        binding.customEffectCheckBox.setOnCheckedChangeListener { _, checked ->
+        binding.blurEffectCheckBox.setOnCheckedChangeListener { _, checked ->
             if (checked) {
-                showToast("Applied Custom effect")
-                viewModel.addCustomEffect()
+                showToast("Applied Blur effect")
+                viewModel.addBlurEffect()
             } else {
-                viewModel.remoteCustomEffect()
+                viewModel.remoteBlurEffect()
             }
         }
 

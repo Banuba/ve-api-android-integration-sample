@@ -27,7 +27,7 @@ class SampleApp : Application() {
             Log.e(TAG, ERR_SDK_NOT_INITIALIZED)
         } else {
             // Initialize Banuba VE UI SDK
-            BanubaVideoEditorSDK().initialize(this@SampleApp)
+            VideoEditorApiModule().initialize(this@SampleApp)
         }
     }
 }

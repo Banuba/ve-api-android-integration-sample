@@ -206,14 +206,14 @@
                 android:text="Add Music" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/customEffectCheckBox"
+                android:id="@+id/blurEffectCheckBox"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkable="true"
                 android:padding="8dp"
                 android:textSize="12sp"
-                android:text="Add Custom effect" />
+                android:text="Add Blur effect" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/takeScreenShotButton"

@@ -3,21 +3,27 @@ package com.banuba.example.videoeditor
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.widget.ImageView
-import com.banuba.example.videoeditor.export.CustomExportParamsProvider
+import androidx.core.net.toFile
 import com.banuba.example.videoeditor.export.ExportViewModel
 import com.banuba.example.videoeditor.playback.PlaybackViewModel
 import com.banuba.example.videoeditor.utils.CustomPublishManager
-import com.banuba.sdk.core.domain.ImageLoader
+import com.banuba.sdk.core.VideoResolution
+import com.banuba.sdk.core.ext.toPx
+import com.banuba.sdk.core.media.MediaFileNameHelper
 import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule
 import com.banuba.sdk.export.data.*
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
 import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
 import com.banuba.sdk.ve.di.VeSdkKoinModule
+import com.banuba.sdk.ve.domain.VideoRangeList
+import com.banuba.sdk.ve.effects.Effects
+import com.banuba.sdk.ve.effects.music.MusicEffect
+import com.banuba.sdk.ve.effects.watermark.WatermarkAlignment
+import com.banuba.sdk.ve.effects.watermark.WatermarkBuilder
 import com.banuba.sdk.ve.effects.watermark.WatermarkProvider
+import com.banuba.sdk.ve.ext.withWatermark
 import com.banuba.sdk.ve.media.VideoGalleryResourceValidator
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
@@ -27,7 +33,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-class BanubaVideoEditorSDK {
+class VideoEditorApiModule {
     fun initialize(application: Application) {
         startKoin {
             androidContext(application)
@@ -40,13 +46,13 @@ class BanubaVideoEditorSDK {
                 TokenStorageKoinModule().module,
                 // Module is required for applying Face AR masks
                 BanubaEffectPlayerKoinModule().module,
-                VideoEditorApiModule().module
+                SampleModule().module
             )
         }
     }
 }
 
-private class VideoEditorApiModule {
+private class SampleModule {
 
     val module = module {
         viewModel {
@@ -67,19 +73,6 @@ private class VideoEditorApiModule {
                     context = androidContext()
                 ),
                 videoPlayer = get()
-            )
-        }
-
-        single<ExportFlowManager> {
-            ForegroundExportFlowManager(
-                exportDataProvider = get(),
-                sessionParamsProvider = get(),
-                exportSessionHelper = get(),
-                exportDir = get(named("exportDir")),
-                publishManager = get(),
-                errorParser = get(),
-                mediaFileNameHelper = get(),
-                exportBundleProvider = get()
             )
         }
 
@@ -140,5 +133,40 @@ private class VideoEditorApiModule {
                 exportBundleProvider = get()
             )
         }
+    }
+}
+
+private class CustomExportParamsProvider(
+    private val exportDir: Uri,
+    private val mediaFileNameHelper: MediaFileNameHelper,
+    private val watermarkBuilder: WatermarkBuilder
+) : ExportParamsProvider {
+
+    override fun provideExportParams(
+        effects: Effects,
+        videoRangeList: VideoRangeList,
+        musicEffects: List<MusicEffect>,
+        videoVolume: Float
+    ): List<ExportParams> {
+        val exportSessionDir = exportDir.toFile().apply {
+            // Export dir must be created
+            mkdirs()
+        }
+
+        // Specify name for your exported video. Do not use ext i.e. .mp4
+        val exportVideoFileName = mediaFileNameHelper.generateExportName() + "_watermark"
+
+        val paramsHdWithWatermark =
+            ExportParams.Builder(VideoResolution.Exact.HD) // Video Quality resolution
+                .effects(effects.withWatermark(watermarkBuilder, WatermarkAlignment.BottomRight(marginRightPx = 16.toPx)))
+                .fileName(exportVideoFileName)
+                .debugEnabled(true)
+                .videoRangeList(videoRangeList)
+                .destDir(exportSessionDir)
+                .musicEffects(musicEffects)
+                .volumeVideo(videoVolume)
+                .build()
+
+        return listOf(paramsHdWithWatermark)
     }
 }
