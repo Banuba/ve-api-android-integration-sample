@@ -10,7 +10,7 @@
 - [FAQ](#FAQ)
 
 ## Overview
-This guide is aimed to help you quickly integrate Export API into your project.
+This guide is aimed to help you quickly to integrate Export API into your project.
 You will learn how to export a number of media files i.e. video, audio, gif with various effects and in various resolutions.  
 
 Export API produces video as ```.mp4``` file.
@@ -349,7 +349,7 @@ for simplicity. You can use any image stored on the device.
 
 ## FAQ
 
-##### 1. I want to create video from image with audio track and effects
+#### 1. I want to create video from image with audio track and effects
 Slideshow does not support adding audio and effects on top. But you can use the following workaround
    1. Create a slideshow video
    2. Use created slideshow video as source and export new video with audio tracks and video effects.

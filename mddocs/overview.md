@@ -22,10 +22,10 @@ Understanding these concepts can help you to implement any number of use cases. 
 2. Cover image selection - allow the user to select a video frame as a preview.
 3. Video editing -  allow the user to edit video by adding various number of effects, audio  
 
-Learn how to quickly integrate [Playback API](quickstart_playback.md) into your project.
+Visit [Playback API quickstart](quickstart_playback.md) to quickly integrate API into your project.
 
 ### Export API
-[ExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager) amd [ExportParamProvider](export/ve-export-sdk/com.banuba.sdk.export.data/-export-params-provider) 
+[ExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager/index.md) amd [ExportParamProvider](export/ve-export-sdk/com.banuba.sdk.export.data/-export-params-provider/index.md) 
 are core of Export API. With Export API you can easily to make any number of video files with various effects and audio.
 
 Supported Features
@@ -35,14 +35,14 @@ Supported Features
 4. Slideshow - video made of images
 5. A GIF preview of a video
 
-Learn how to quickly integrate [Export API](quickstart_export.md) into your project.
+Visit [Export API quickstart](quickstart_export.md) to quickly integrate API into your project.
 
 ## Dependencies
 - [Koin](https://insert-koin.io/)
 - [ExoPlayer](https://github.com/google/ExoPlayer)
 - [Kotlin Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
 - [AndroidX](https://developer.android.com/jetpack/androidx) libraries
-- [Learn all](all_dependencies.md)
+- [See all](all_dependencies.md)
 
 ### Setup API
 GitHub packages is used for getting Android Video Editor API modules.
@@ -146,5 +146,5 @@ videoEditor.getLicenseState { isValid ->
 ```
 
 ## What is next?
-We highly recommend to visit [Playback API](quickstart_playback.md) and [Export API](quickstart_export.md) quickstart guides to 
+We highly recommend to learn [Playback API quickstart](quickstart_playback.md) and [Export API quickstart](quickstart_export.md) guides to 
 streamline your integration process.

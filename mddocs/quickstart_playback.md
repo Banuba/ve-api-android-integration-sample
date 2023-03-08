@@ -12,8 +12,8 @@
 - [Manage effects](#Manage-effects)
 
 ## Overview
-This guide is aimed to help you quickly integrate Playback API into your project. 
-You will learn how to use core features and build use cases and meet your requirements.
+This guide is aimed to help you to quickly integrate Playback API into your project. 
+You will learn how to use core features and build use cases to meet your product requirements.
 
 ## Prerequisites
 Please complete [Installation](../README.md#Installation) and [Setup API](overview.md#Setup-API) steps before to proceed.
@@ -60,7 +60,7 @@ Use [VideoPlayer.setCallback](playback/ve-playback-sdk/com.banuba.sdk.playback/-
 ```kotlin
 videoPlayer.setCallback(videoPlayerCallback)
 ```
-Learn more about supported [callbacks](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-player/-callback/index.md)
+Learn supported [callback methods](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-player/-callback/index.md)
 
 ## Release video player
 It is highly recommended to stop and release video player if the user leaves the screen.
@@ -76,20 +76,23 @@ videoPlayer.release()
 ## Add video playlist
 Use [VideoPlayer.setVideoRanges](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-player/set-video-ranges.md) method and pass ```List<VideoRecordRange>``` 
 to add video playlist you want to play. ```VideoRecordRange``` is a core class in Playback API and Export API which is responsible for
-describing video source and its capabilities i.e. speed, start and end positions of video to export and so on.   
+describing video source and its capabilities i.e. speed, start and end positions of video to export etc.  
+
+
 :exclamation:Important  
 ```VideoPlayer``` supports playing video stored on the device and the following [media formats](../README.md#Supported-media-formats). 
+
 
 :bulb: Hint   
 You have a list of video sources as ```List<Uri>``` that are stored on the device. You need to convert each  ```Uri``` to ```VideoRecordRange``` 
 by providing required properties and especially video playing boundaries.  
 
 ```VideoPlayer``` notifies if not supported video is used. We highly recommend to validate each video source you want to play.
-Please [check out](../app/src/main/java/com/banuba/example/videoeditor/playback/PlaybackViewModel.kt#L94) full implementation
- of converting ```Uri``` to  ```VideoRecordRange``` and validating it in the sample.
+Please [check out](../app/src/main/java/com/banuba/example/videoeditor/playback/PlaybackViewModel.kt#L94) full implementation how to
+ convert ```Uri``` to  ```VideoRecordRange``` and validate it in the sample.
 
 ## Manage video player actions
-```VideoPlayer``` includes a number of well known player action methods for controlling video playback
+```VideoPlayer``` supports a number of well known player action methods for controlling video playback
 - [VideoPlayer.play](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-player/play.md)
 - [VideoPlayer.pause](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-player/pause.md)
 - [VideoPlayer.isPlaying](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-player/is-playing.md)
@@ -104,6 +107,8 @@ videoPlayer.play(shouldRepeat) // true - repeat playing
 Implementing video trimming or editing features you might need to move playback to a certain position and set start and end 
 video playing boundaries. Use [VideoPlayer.seekTo](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-player/seek-to.md) method to move 
 playback to a certain position.  
+
+
 :exclamation:Important  
 Position is represented as time in milliseconds. 
 ```kotlin
@@ -117,8 +122,9 @@ Use [VideoPlayer.setMusicEffects](playback/ve-playback-sdk/com.banuba.sdk.playba
 videoPlayer.setMusicEffects(tracks)
 ```
 :bulb: Hint  
-You have an audio track as ```Uri``` and you want to add it to video. You need to convert ```Uri``` to ```MusicEffect``` and set all required properties. 
-Managing what audio tracks used added and removed should be implemented in your side as well. 
+You have an audio track as ```Uri``` and you want to add it to video. Just convert ```Uri``` to ```MusicEffect``` and set all required properties. 
+Implement managing what audio tracks the user adds and removes.  
+
 Please [check out](../app/src/main/java/com/banuba/example/videoeditor/playback/PlaybackViewModel.kt#L180) full implementation
 of converting ```Uri``` to  ```MusicEffect``` and adding it to ```VideoPlayer```.
 
@@ -133,7 +139,7 @@ Use [VideoPlayer.setEffects](playback/ve-playback-sdk/com.banuba.sdk.playback/-v
 fun setEffects(effects: List<TypedTimedEffect<*>>)
 ```
 
-Implement effect management on your side by tracking what effects the user adds or removes.
+Implement effect management on your side by tracking what effects the user adds and removes.
 ```kotlin
 val effects = mutableListOf<TypedTimedEffect<*>>()
 ```
@@ -180,7 +186,8 @@ val vhsEffect = VisualTimedEffect(effectDrawable = vhsDrawable)
 In this example, we create Sticker effect. It requires ```.gif``` file stored on the device and ```Uri``` to locate it.  
 
 :bulb: Hint      
-If you use sticker services as [GIPHY](https://giphy.com/) you should download sticker as ```.gif``` file to the device.
+If you use sticker services as [GIPHY](https://giphy.com/) you should download sticker as ```.gif``` file to the device and 
+then use this file to create the effect.
 
 ```kotlin
 val stickerUri = context.copyFromAssetsToExternal("example.gif").toUri()
