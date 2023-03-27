@@ -9,6 +9,7 @@ import com.banuba.example.videoeditor.export.ExportViewModel
 import com.banuba.example.videoeditor.playback.PlaybackViewModel
 import com.banuba.example.videoeditor.utils.CustomPublishManager
 import com.banuba.sdk.core.VideoResolution
+import com.banuba.sdk.core.analytics.AppAnalytics
 import com.banuba.sdk.core.ext.toPx
 import com.banuba.sdk.core.media.MediaFileNameHelper
 import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule
@@ -16,6 +17,7 @@ import com.banuba.sdk.export.data.*
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
 import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
+import com.banuba.sdk.ve.analytics.BanubaAnalyticConverter
 import com.banuba.sdk.ve.di.VeSdkKoinModule
 import com.banuba.sdk.ve.domain.VideoRangeList
 import com.banuba.sdk.ve.effects.Effects
@@ -108,13 +110,12 @@ private class SampleModule {
         single<ExportFlowManager>(named("foregroundExportFlowManager")) {
             ForegroundExportFlowManager(
                 exportDataProvider = get(),
-                sessionParamsProvider = get(),
                 exportSessionHelper = get(),
                 exportDir = get(named("exportDir")),
                 publishManager = get(),
                 errorParser = get(),
-                mediaFileNameHelper = get(),
-                exportBundleProvider = get()
+                exportBundleProvider = get(),
+                eventConverter = get()
             )
         }
 
@@ -124,13 +125,20 @@ private class SampleModule {
         single<ExportFlowManager>(named("backgroundExportFlowManager")) {
             BackgroundExportFlowManager(
                 exportDataProvider = get(),
-                sessionParamsProvider = get(),
                 exportSessionHelper = get(),
                 exportNotificationManager = get(),
                 exportDir = get(named("exportDir")),
                 publishManager = get(),
                 errorParser = get(),
-                exportBundleProvider = get()
+                exportBundleProvider = get(),
+                eventConverter = get()
+            )
+        }
+
+        single<AppAnalytics.AppAnalyticsEventConverter> {
+            BanubaAnalyticConverter(
+                sessionSerializer = get(),
+                aspectsProvider = get()
             )
         }
     }
