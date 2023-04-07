@@ -17,7 +17,6 @@ import com.banuba.sdk.export.data.*
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
 import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
-import com.banuba.sdk.ve.analytics.BanubaAnalyticConverter
 import com.banuba.sdk.ve.di.VeSdkKoinModule
 import com.banuba.sdk.ve.domain.VideoRangeList
 import com.banuba.sdk.ve.effects.Effects
@@ -132,13 +131,6 @@ private class SampleModule {
                 errorParser = get(),
                 exportBundleProvider = get(),
                 eventConverter = get()
-            )
-        }
-
-        single<AppAnalytics.AppAnalyticsEventConverter> {
-            BanubaAnalyticConverter(
-                sessionSerializer = get(),
-                aspectsProvider = get()
             )
         }
     }
