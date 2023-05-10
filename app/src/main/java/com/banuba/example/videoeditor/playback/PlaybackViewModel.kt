@@ -268,6 +268,12 @@ class PlaybackViewModel(
 
     fun addColorEffect() {
         val colorEffect = SampleEffectsProvider.createColorFilterEffect(context)
+        colorEffect.startWindow = 0 // Index of your first video
+        colorEffect.startTime = 1000 // Position in milliseconds of your first video where you want to start applying effect
+        colorEffect.endWindow = 1 // Index of your last video
+        colorEffect.endTime = 1000 // Position in milliseconds of your last video where you want to end applying effect
+
+        // The effect will be applied from 3 second of the first video to the 3 second of the second video
         addEffectInternal(colorEffect)
     }
 
