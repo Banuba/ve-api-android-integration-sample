@@ -9,7 +9,6 @@ import com.banuba.example.videoeditor.export.ExportViewModel
 import com.banuba.example.videoeditor.playback.PlaybackViewModel
 import com.banuba.example.videoeditor.utils.CustomPublishManager
 import com.banuba.sdk.core.VideoResolution
-import com.banuba.sdk.core.analytics.AppAnalytics
 import com.banuba.sdk.core.ext.toPx
 import com.banuba.sdk.core.media.MediaFileNameHelper
 import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule
