@@ -219,7 +219,8 @@ class ExportViewModel(
                 playToMs = videoDuration,       //optional, by default equals duration of video,
                 rotation = Rotation.ROTATION_0,  //optional, by default ROTATION_0
                 type = VideoSourceType.GALLERY,  //mandatory, type of video source (gallery, camera, slideshow)
-                pipApplied = false
+                pipApplied = false,
+                containsAudio = true             //mandatory, video contains audio track
             )
         }
         return VideoRangeList(videoRecords)

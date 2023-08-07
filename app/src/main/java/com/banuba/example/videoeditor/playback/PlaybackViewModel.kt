@@ -22,6 +22,7 @@ import com.banuba.sdk.effects.ve.VideoEffectsHelper
 import com.banuba.sdk.playback.PlaybackError
 import com.banuba.sdk.playback.PlayerScaleType
 import com.banuba.sdk.playback.VideoPlayer
+import com.banuba.sdk.ve.effects.Effects
 import com.banuba.sdk.ve.effects.TypedTimedEffect
 import com.banuba.sdk.ve.effects.VisualTimedEffect
 import com.banuba.sdk.ve.ext.DurationHelper
@@ -100,7 +101,8 @@ class PlaybackViewModel(
                     VideoEditorUtils.createVideoRecordRange(
                         sourceUri = it,
                         context = context,
-                        pipApplied = false
+                        pipApplied = false,
+                        containsAudio = true
                     )
                 }
 
@@ -286,11 +288,17 @@ class PlaybackViewModel(
 
     private fun addEffectInternal(effect: TypedTimedEffect<*>) {
         appliedEffects.add(effect)
-        videoPlayer.setEffects(appliedEffects)
+        val effects = Effects().apply {
+            put(appliedEffects)
+        }
+        videoPlayer.setEffects(effects)
     }
 
     private fun removeEffectsByTypeInternal(@DrawType type: Int) {
         appliedEffects.removeAll { it.drawable.type == type }
-        videoPlayer.setEffects(appliedEffects)
+        val effects = Effects().apply {
+            put(appliedEffects)
+        }
+        videoPlayer.setEffects(effects)
     }
 }
