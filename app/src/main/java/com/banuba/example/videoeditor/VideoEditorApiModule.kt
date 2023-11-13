@@ -15,7 +15,6 @@ import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule
 import com.banuba.sdk.export.data.*
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
-import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
 import com.banuba.sdk.ve.di.VeSdkKoinModule
 import com.banuba.sdk.ve.domain.VideoRangeList
 import com.banuba.sdk.ve.effects.Effects
@@ -43,7 +42,6 @@ class VideoEditorApiModule {
                 VeSdkKoinModule().module,
                 VeExportKoinModule().module,
                 VePlaybackSdkKoinModule().module,
-                TokenStorageKoinModule().module,
                 // Module is required for applying Face AR masks
                 BanubaEffectPlayerKoinModule().module,
                 SampleModule().module
