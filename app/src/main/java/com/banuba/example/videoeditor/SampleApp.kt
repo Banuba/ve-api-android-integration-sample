@@ -2,7 +2,7 @@ package com.banuba.example.videoeditor
 
 import android.app.Application
 import android.util.Log
-import com.banuba.sdk.token.storage.license.BanubaVideoEditor
+import com.banuba.sdk.core.license.BanubaVideoEditor
 
 class SampleApp : Application() {
 
