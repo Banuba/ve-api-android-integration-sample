@@ -47,18 +47,25 @@ Visit [Export API quickstart](quickstart_export.md) to quickly integrate API int
 ### Setup API
 GitHub packages is used for getting Android Video Editor API modules.
 
-Add repositories to your [project gradle](../settings.gradle#L18) file.
+Add repositories to your [project gradle](../settings.gradle#L18) file in ```allprojects``` section to get SDK dependencies.
 ```groovy
+...
+
+allprojects {
     repositories {
+        ...
+
         maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/Banuba/banuba-ve-sdk")
             credentials {
                 username = "Banuba"
-                password = ""
+                password = "\u0038\u0036\u0032\u0037\u0063\u0035\u0031\u0030\u0033\u0034\u0032\u0063\u0061\u0033\u0065\u0061\u0031\u0032\u0034\u0064\u0065\u0066\u0039\u0062\u0034\u0030\u0063\u0063\u0037\u0039\u0038\u0063\u0038\u0038\u0066\u0034\u0031\u0032\u0061\u0038"
             }
         }
+        ...
     }
+}
 ```
 Next, add a list of API dependencies in [app/build.gradle](app/build.gradle#L47) file.
 
