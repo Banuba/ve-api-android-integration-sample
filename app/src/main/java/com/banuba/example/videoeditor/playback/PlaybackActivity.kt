@@ -8,7 +8,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.banuba.example.videoeditor.databinding.ActivityPlaybackBinding
 import com.banuba.example.videoeditor.utils.GetMultipleContents
+import com.banuba.sdk.core.data.MediaDataGalleryValidator
+import com.banuba.sdk.core.data.MediaValidationResultType
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 class PlaybackActivity : AppCompatActivity() {
 
@@ -20,15 +24,18 @@ class PlaybackActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlaybackBinding
 
-    private val selectVideos = registerForActivityResult(GetMultipleContents()) {
-        val predefinedVideos = it.toTypedArray()
+    private val selectVideos = registerForActivityResult(GetMultipleContents()) { list ->
+        val predefinedVideos = list.toTypedArray()
         val hasVideoContent = predefinedVideos.isNotEmpty()
 
         if (hasVideoContent) {
-            binding.playbackContainer.visibility = View.VISIBLE
-            binding.pickVideoButton.visibility = View.GONE
-
-            viewModel.addVideoContent(predefinedVideos)
+            if (list.all { videoValidator.getValidationResult(it) == MediaValidationResultType.VALID_FILE} ) {
+                viewModel.addVideoContent(predefinedVideos)
+                binding.playbackContainer.visibility = View.VISIBLE
+                binding.pickVideoButton.visibility = View.GONE
+            } else {
+                showToast("Media file is not supported")
+            }
         } else {
             showToast("Please pick video content to proceed")
 
@@ -36,6 +43,8 @@ class PlaybackActivity : AppCompatActivity() {
             binding.pickVideoButton.visibility = View.VISIBLE
         }
     }
+
+    private val videoValidator: MediaDataGalleryValidator by inject(named("videoDataValidator"))
 
     private val selectMusicTrack = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it == null) {
