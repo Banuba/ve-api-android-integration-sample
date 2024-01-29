@@ -1,5 +1,6 @@
 package com.banuba.example.videoeditor.playback
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
@@ -8,7 +9,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.banuba.example.videoeditor.databinding.ActivityPlaybackBinding
 import com.banuba.example.videoeditor.utils.GetMultipleContents
+import com.banuba.sdk.core.data.MediaDataGalleryValidator
+import com.banuba.sdk.core.data.MediaValidationResultType
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 class PlaybackActivity : AppCompatActivity() {
 
@@ -20,15 +25,21 @@ class PlaybackActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlaybackBinding
 
-    private val selectVideos = registerForActivityResult(GetMultipleContents()) {
-        val predefinedVideos = it.toTypedArray()
+    // Get video editor specific validator used in Video Editor UI SDK
+    private val videoValidator: MediaDataGalleryValidator by inject(named("videoDataValidator"))
+
+    private val selectVideos = registerForActivityResult(GetMultipleContents()) { list ->
+        val predefinedVideos = list.toTypedArray()
         val hasVideoContent = predefinedVideos.isNotEmpty()
 
         if (hasVideoContent) {
-            binding.playbackContainer.visibility = View.VISIBLE
-            binding.pickVideoButton.visibility = View.GONE
-
-            viewModel.addVideoContent(predefinedVideos)
+            if (list.all { validateMedia(it) }) {
+                viewModel.addVideoContent(predefinedVideos)
+                binding.playbackContainer.visibility = View.VISIBLE
+                binding.pickVideoButton.visibility = View.GONE
+            } else {
+                showToast("Media file is not supported")
+            }
         } else {
             showToast("Please pick video content to proceed")
 
@@ -36,6 +47,12 @@ class PlaybackActivity : AppCompatActivity() {
             binding.pickVideoButton.visibility = View.VISIBLE
         }
     }
+
+    // This operation validates media to be applied in Video Editor playback.
+    // Operation usually might take time to open and read media
+    // Please consider moving all validations especially if you have list of media into background.
+    private fun validateMedia(mediaUri: Uri): Boolean =
+        videoValidator.getValidationResult(mediaUri) == MediaValidationResultType.VALID_FILE
 
     private val selectMusicTrack = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it == null) {
