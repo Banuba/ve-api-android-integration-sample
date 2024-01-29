@@ -1,5 +1,6 @@
 package com.banuba.example.videoeditor.playback
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
@@ -24,12 +25,15 @@ class PlaybackActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlaybackBinding
 
+    // Get video editor specific validator used in Video Editor UI SDK
+    private val videoValidator: MediaDataGalleryValidator by inject(named("videoDataValidator"))
+
     private val selectVideos = registerForActivityResult(GetMultipleContents()) { list ->
         val predefinedVideos = list.toTypedArray()
         val hasVideoContent = predefinedVideos.isNotEmpty()
 
         if (hasVideoContent) {
-            if (list.all { videoValidator.getValidationResult(it) == MediaValidationResultType.VALID_FILE} ) {
+            if (list.all { validateMedia(it) }) {
                 viewModel.addVideoContent(predefinedVideos)
                 binding.playbackContainer.visibility = View.VISIBLE
                 binding.pickVideoButton.visibility = View.GONE
@@ -44,7 +48,11 @@ class PlaybackActivity : AppCompatActivity() {
         }
     }
 
-    private val videoValidator: MediaDataGalleryValidator by inject(named("videoDataValidator"))
+    // This operation validates media to be applied in Video Editor playback.
+    // Operation usually might take time to open and read media
+    // Please consider moving all validations especially if you have list of media into background.
+    private fun validateMedia(mediaUri: Uri): Boolean =
+        videoValidator.getValidationResult(mediaUri) == MediaValidationResultType.VALID_FILE
 
     private val selectMusicTrack = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it == null) {
