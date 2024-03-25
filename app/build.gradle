@@ -10,11 +10,11 @@ android {
     defaultConfig {
         applicationId "com.banuba.example.videoeditor"
         minSdk 23
-        targetSdk 33
-        compileSdk 33
+        targetSdk 34
+        compileSdk 34
         versionCode 1
         versionName "1.0"
-        buildToolsVersion "33.0.1"
+        buildToolsVersion "34.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,7 +52,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
 
     // Banuba Face AR SDK dependencies
-    def banubaSdkVersion = '1.34.0'
+    def banubaSdkVersion = '1.35.0'
     implementation "com.banuba.sdk:ffmpeg:5.1.3"
     implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
