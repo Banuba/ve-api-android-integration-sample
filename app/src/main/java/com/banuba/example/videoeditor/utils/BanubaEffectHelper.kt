@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.net.Uri
 import android.util.Log
-import com.banuba.sdk.core.ext.isDirectory
 import java.io.File
 import java.io.IOException
 /**
@@ -102,4 +101,11 @@ class BanubaEffectHelper(context: Context) {
         val name: String,
         val previewImageUri: Uri
     )
+
+    private fun AssetManager.isDirectory(path: String): Boolean = try {
+        list(path)?.isNotEmpty() ?: false
+    } catch (e: IOException) {
+        Log.w(TAG, e)
+        false
+    }
 }
