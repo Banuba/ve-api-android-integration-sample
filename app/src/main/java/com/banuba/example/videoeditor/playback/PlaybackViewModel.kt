@@ -145,11 +145,11 @@ class PlaybackViewModel(
     }
 
     fun rewind() {
-        videoPlayer.seekTo(0)
+        videoPlayer.seekTo(0, false)
     }
 
     fun seekTo(position: Int) {
-        videoPlayer.seekTo(position)
+        videoPlayer.seekTo(position, false)
     }
 
     fun seekForward() {
