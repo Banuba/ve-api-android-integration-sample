@@ -30,7 +30,7 @@ class SampleActivity : AppCompatActivity() {
  ...
 }
 ```
-2. In Android [ViewModel](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L70) using Koin.
+2. In Android [ViewModel](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L73) using Koin.
 ```diff
  viewModel {
    PlaybackViewModel(

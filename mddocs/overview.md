@@ -63,6 +63,14 @@ allprojects {
                 password = "\u0038\u0036\u0032\u0037\u0063\u0035\u0031\u0030\u0033\u0034\u0032\u0063\u0061\u0033\u0065\u0061\u0031\u0032\u0034\u0064\u0065\u0066\u0039\u0062\u0034\u0030\u0063\u0063\u0037\u0039\u0038\u0063\u0038\u0038\u0066\u0034\u0031\u0032\u0061\u0038"
             }
         }
+        maven {
+            name "GitHubPackagesEffectPlayer"
+            url "https://maven.pkg.github.com/sdk-banuba/banuba-sdk-android"
+            credentials {
+                username = "sdk-banuba"
+                password = "\u0067\u0068\u0070\u005f\u004a\u0067\u0044\u0052\u0079\u0049\u0032\u006d\u0032\u004e\u0055\u0059\u006f\u0033\u0033\u006b\u0072\u0034\u0049\u0069\u0039\u0049\u006f\u006d\u0077\u0034\u0052\u0057\u0043\u0064\u0030\u0052\u0078\u006d\u0045\u0069"
+            }
+        }
         ...
     }
 }
@@ -70,17 +78,17 @@ allprojects {
 Next, add a list of API dependencies in [app/build.gradle](app/build.gradle#L47) file.
 
 ```groovy
-  def banubaSdkVersion = '1.26.5.1'
+  def banubaSdkVersion = '1.37.0'
   implementation "com.banuba.sdk:ffmpeg:5.1.3"
-  implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-playback-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-export-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-effects-sdk:${banubaSdkVersion}"
-  
+
   // Only if you use Banuba Face AR
-  implementation 'com.banuba.sdk:effect-player:1.5.3.1'
+  implementation "com.banuba.sdk:effect-player-adapter:${banubaSdkVersion}"
+
 ```
 
 Custom behavior of Video Editor API is implemented by using dependency injection framework [Koin](https://insert-koin.io/).
@@ -98,10 +106,9 @@ for implementing Video Editor API and add all required API modules.
                 VeSdkKoinModule().module,
                 VeExportKoinModule().module,
                 VePlaybackSdkKoinModule().module,
-                TokenStorageKoinModule().module,
                 // Module is required for applying Face AR masks
                 BanubaEffectPlayerKoinModule().module,
-                SampleModule().module // 
+                SampleModule().module
             )
         }
     }

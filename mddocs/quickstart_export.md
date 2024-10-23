@@ -146,35 +146,35 @@ Other properties
 - `extraAudioFile(extraAudioTrack: Uri)` - where to store extra audio file from video
 - `volumeVideo(volume: Float)` - set audio volume in video
 
-Next, specify this implementation in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L79)
+Next, specify this implementation in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L77)
 
 ```kotlin
 factory<ExportParamsProvider> {
-            CustomExportParamsProvider(
-                exportDir = get(named("exportDir")),
-                mediaFileNameHelper = get(),
-                watermarkBuilder = get()
-            )
-        }
-```
-
-Finally, use the most suitable export mode for your application - ```ForegroundExportFlowManager``` or ```BackgroundExportFlowManager``` in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L108).
-```kotlin
-        single<ExportFlowManager>(named("foregroundExportFlowManager")) {
-            ForegroundExportFlowManager(
-                exportDataProvider = get(),
-                sessionParamsProvider = get(),
-                exportSessionHelper = get(),
-                exportDir = get(named("exportDir")),
-                publishManager = get(),
-                errorParser = get(),
-                mediaFileNameHelper = get(),
-                exportBundleProvider = get()
-        )
+    CustomExportParamsProvider(
+        exportDir = get(named("exportDir")),
+        mediaFileNameHelper = get(),
+        watermarkBuilder = get()
+    )
 }
 ```
 
-Full implementation of [CustomExportParamsProvider](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L139) is available in the samp;e.
+Finally, use the most suitable export mode for your application - ```ForegroundExportFlowManager``` or ```BackgroundExportFlowManager``` in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L106).
+```kotlin
+single<ExportFlowManager>(named("foregroundExportFlowManager")) {
+    ForegroundExportFlowManager(
+        exportDataProvider = get(),
+        sessionParamsProvider = get(),
+        exportSessionHelper = get(),
+        exportDir = get(named("exportDir")),
+        publishManager = get(),
+        errorParser = get(),
+        mediaFileNameHelper = get(),
+        exportBundleProvider = get()
+    )
+}
+```
+
+Full implementation of [CustomExportParamsProvider](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L136) is available in the sample.
 
 ## Prepare effects
 You have at least 2 options how to prepare video effects and audio tracks for export:
@@ -185,7 +185,7 @@ Please visit [Manage effects](quickstart_playback.md#Manage-effects) guide where
 The same approach works for export as well.
 
 ### Get export flow manager
-Instance of [ExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager/index.md) is created in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L108).
+Instance of [ExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager/index.md) is created in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L59).
 You can access to this instance in 2 ways
 1. Using [Koin](https://insert-koin.io/) inject in Android Fragment or Activity classes.
 ``` diff
@@ -215,7 +215,7 @@ you can use to start export execution. Each method requires instance of [ExportT
 to start execution that describes a number of properties for produced media file.
 
 :bulb: Hint    
-you have ```List<Uri>``` video that stored on the device. Next step is to convert ```List<Uri>``` to
+You have ```List<Uri>``` video that stored on the device. Next step is to convert ```List<Uri>``` to
 ```VideoRangeList``` where every ```Uri``` is converted to ```VideoRecordRange```.
 Instance of ```VideoRecordRange``` describes video source and its capabilities for the export i.e. speed, start and end positions of video to export etc.
 ```kotlin
@@ -327,17 +327,17 @@ In this sample, slideshow video with resolution FHD(1080p) is made by a list of 
 val videoFHD = Size(1080, 1920)
 
 val sources = imageUriList.map { uri ->
-            SlideShowSource.File(
-                durationMs = 3_000L, // each image takes 3 seconds in video
-                source = uri
-            )
+    SlideShowSource.File(
+        durationMs = 3_000L, // each image takes 3 seconds in video
+        source = uri
+    )
 }
 
 val params = SlideShowTask.Params.create(
-  context = context,
-  size = videoFHD,
-  destFile = ..., // File where to store video 
-  sources = sources
+    context = context,
+    size = videoFHD,
+    destFile = ..., // File where to store video 
+    sources = sources
 )
 SlideShowTask.makeVideo(params)
 ```
