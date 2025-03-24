@@ -78,8 +78,8 @@ allprojects {
 Next, add a list of API dependencies in [app/build.gradle](app/build.gradle#L47) file.
 
 ```groovy
-  def banubaSdkVersion = '1.40.0'
-  implementation "com.banuba.sdk:ffmpeg:5.1.3"
+  def banubaSdkVersion = '1.41.0'
+  implementation "com.banuba.sdk:ffmpeg:5.2.0"
   implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-playback-sdk:${banubaSdkVersion}"
