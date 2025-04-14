@@ -14,7 +14,7 @@ android {
         compileSdk 35
         versionCode 1
         versionName "1.0"
-        buildToolsVersion "34.0.0"
+        buildToolsVersion "35.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,7 +52,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.15.0'
 
     // Banuba Face AR SDK dependencies
-    def banubaSdkVersion = '1.42.0'
+    def banubaSdkVersion = '1.42.0.1'
     implementation "com.banuba.sdk:ffmpeg:5.3.0"
     implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
