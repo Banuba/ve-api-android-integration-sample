@@ -27,7 +27,7 @@ object SampleEffectsProvider {
         context: Context,
         fxName: String
     ): VisualTimedEffect {
-        val availableList = VideoEffectsHelper.takeAvailableFxEffects(context)
+        val availableList = VideoEffectsHelper.provideVisualEffects(context)
         val vhsDrawable = availableList.find {
             context.getString(it.nameRes) == fxName
         }?.provide() ?: throw Exception("VHS video effect is not available!")
