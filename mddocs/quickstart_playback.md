@@ -170,10 +170,10 @@ val slowMoEffect = SpeedTimedEffect(VideoEffectsHelper.createSpeedEffect(0.5F))
 ### Create FX effect
 In this example, we create a FX effect ```VHS```.  
 As mentioned before the list of allowed FX effects is in the license token.
-Use ```VideoEffectsHelper.takeAvailableFxEffects``` to get available FX effects.
+Use ```VideoEffectsHelper.provideVisualEffects``` to get available FX effects.
 ```kotlin
 val fxName = "VHS"
-val availableList = VideoEffectsHelper.takeAvailableFxEffects(context)
+val availableList = VideoEffectsHelper.provideVisualEffects(context)
 val vhsDrawable = availableList.find {
   context.getString(it.nameRes) == fxName
 }?.provide() ?: throw Exception("VHS video effect is not available!")
