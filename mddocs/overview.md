@@ -4,73 +4,85 @@
 - [Dependencies](#Dependencies)
 - [Setup API](#Setup-API)
 
-## Understand core concepts
-Video Editor API includes 2 main core modules
+## Core concepts
+The Video Editor API consists of two primary modules:
 - ```Playback API```
 - ```Export API```
 
 ### Playback API
-[VideoPlayer](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-player/index.md) is a core of Playback API.  ```VideoPlayer``` is implemented in a similar way like other media players.
-Main concepts
-1. Add video playlist you want to play
-2. Manage actions i.e. play, pause, change volume etc.
-3. Manage effects
-4. Handle events 
 
-Understanding these concepts can help you to implement any number of use cases. For example, 
-1. Video trimming - allow the user to trim, merge any number of video sources
-2. Cover image selection - allow the user to select a video frame as a preview.
-3. Video editing -  allow the user to edit video by adding various number of effects, audio  
+The [`VideoPlayer`](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-player/index.md) is the core component of the Playback API, implementing a familiar media player pattern.
 
-Visit [Playback API quickstart](quickstart_playback.md) to quickly integrate API into your project.
+#### Key Concepts
+
+1. **Playlist Management** - Add video sources for playback
+2. **Playback Control** - Play, pause, seek, and volume adjustment
+3. **Effects Management** - Apply and control video effects
+4. **Event Handling** - Monitor playback state and errors
+
+#### Common Use Cases
+
+| Use Case | Description |
+|----------|-------------|
+| **Video Trimming** | Trim and merge multiple video sources |
+| **Cover Selection** | Extract frames for video thumbnails |
+| **Video Editing** | Apply effects, filters, and audio tracks |
+
+👉 See [Playback API Quickstart](quickstart_playback.md) for integration guide.
 
 ### Export API
-[ExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager/index.md) amd [ExportParamProvider](export/ve-export-sdk/com.banuba.sdk.export.data/-export-params-provider/index.md) 
-are core of Export API. With Export API you can easily to make any number of video files with various effects and audio.
 
-Supported Features
-1. Any number of video in various resolutions
-2. Video with any number of various effects
-3. A separate audio file
-4. Slideshow - video made of images
-5. A GIF preview of a video
+The [`ExportFlowManager`](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager/index.md) and [`ExportParamsProvider`](export/ve-export-sdk/com.banuba.sdk.export.data/-export-params-provider/index.md) are the core components of the Export API, enabling video rendering with applied effects and audio.
 
-Visit [Export API quickstart](quickstart_export.md) to quickly integrate API into your project.
+#### Capabilities
 
-## Dependencies
-- [Koin](https://insert-koin.io/)
-- [ExoPlayer](https://github.com/google/ExoPlayer)
-- [Kotlin Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-- [AndroidX](https://developer.android.com/jetpack/androidx) libraries
-- [See all](all_dependencies.md)
+- **Multiple Video Sources** - Combine any number of video clips at various resolutions
+- **Rich Effects** - Export videos with all applied filters, overlays, and adjustments
+- **Audio Integration** - Add separate audio tracks to the final output
+- **Slideshow Creation** - Generate videos from a sequence of images
+- **Preview Generation** - Create GIF previews of exported videos
 
-### Setup API
-GitHub packages is used for getting Android Video Editor API modules.
+👉 See [Export API Quickstart](quickstart_export.md) for integration guide.
 
-Add repositories to your [project gradle](../settings.gradle#L18) file in ```allprojects``` section to get SDK dependencies.
+## Installation
+Add the Banuba repository to your project using **either** Groovy **or** Kotlin DSL:
+
+**Groovy** (in project's build.gradle)
+
 ```groovy
 ...
 
 allprojects {
     repositories {
-        ...
-
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/Banuba/banuba-ve-sdk")
-            credentials {
-                username = "Banuba"
-                password = "\u0038\u0036\u0032\u0037\u0063\u0035\u0031\u0030\u0033\u0034\u0032\u0063\u0061\u0033\u0065\u0061\u0031\u0032\u0034\u0064\u0065\u0066\u0039\u0062\u0034\u0030\u0063\u0063\u0037\u0039\u0038\u0063\u0038\u0038\u0066\u0034\u0031\u0032\u0061\u0038"
-            }
-        }
-        ...
+       ...
+       maven {
+          name = "nexus"
+          url = uri("https://nexus.banuba.net/repository/maven-releases")
+       }
     }
 }
 ```
+or
+
+**Kotlin** (settings.gradle.kts)
+```kotlin
+...
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        ...
+        maven {
+            name = "nexus"
+            url = uri("https://nexus.banuba.net/repository/maven-releases")
+        }
+    }
+}
+```
+
 Next, add a list of API dependencies in [app/build.gradle](app/build.gradle#L47) file.
 
 ```groovy
-  def banubaSdkVersion = '1.26.5.1'
+  def banubaSdkVersion = '1.49.5'
   implementation "com.banuba.sdk:ffmpeg:5.1.3"
   implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
@@ -151,6 +163,13 @@ videoEditor.getLicenseState { isValid ->
    }
 }
 ```
+
+## Dependencies
+- [Koin](https://insert-koin.io/)
+- [ExoPlayer](https://github.com/google/ExoPlayer)
+- [Kotlin Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+- [AndroidX](https://developer.android.com/jetpack/androidx) libraries
+- [See all](all_dependencies.md)
 
 ## What is next?
 We highly recommend to learn [Playback API quickstart](quickstart_playback.md) and [Export API quickstart](quickstart_export.md) guides to 

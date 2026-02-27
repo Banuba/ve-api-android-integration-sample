@@ -5,22 +5,29 @@ Banuba Video Editor API lets you add video editing capabilities and AR effects t
 
 ## Usage
 ### License
-Before you commit to a license, you are free to test all the features of the SDK for free. The trial period lasts 14 days. To start it, [send us a message](https://www.banuba.com/video-editor-sdk#form).
-We will get back to you with the trial token.  
-Feel free to [contact us](https://www.banuba.com/support) if you have any questions.
+Before you commit to a license, you are free to test all the features of the SDK for free.  
+**The trial period lasts 14 days**.
 
-## Installation
+Send us a message to start the [Video Editor SDK trial](https://www.banuba.com/video-editor-sdk#form) | [Photo Editor SDK trial](https://www.banuba.com/photo-editor-sdk#form). We will get back to you with the trial token.
 
-1. Clone the repository and open the project in IDE
-2. Set the license token [within the app](app/src/main/java/com/banuba/example/videoeditor/SampleApp.kt#L14)
-3. Run the sample application in your IDE
+### Quickstart Integration Guide
+See the [Quickstart Guide](mddocs/overview.md) for complete integration steps, including:
 
-## Integration overview
-Learn [Integration overview](mddocs/overview.md) how quickly to integrate API into your project.
+1. Repository setup
+
+2. License token [configuration](app/src/main/java/com/banuba/example/videoeditor/SampleApp.kt#L14)
+
+3. Running the sample app
+
+
+### Support
+For questions about Video Editor or Photo Editor SDK, reach out to Banuba support service
+- [Video Editor SDK](https://www.banuba.com/faq/kb-tickets/new)
+- [Photo Editor SDK](https://www.banuba.com/support)
 
 ## Requirements
 - Java 1.8+
-- Kotlin 1.4+
+- Kotlin 2.2+
 - Android Studio 4+
 - OpenGL ES 3.0 (3.1 for Neural networks on GPU)
 
