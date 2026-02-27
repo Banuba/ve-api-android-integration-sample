@@ -145,7 +145,8 @@ class ExportViewModel(
                 startOnTimelineMs = 0L,
                 effectDurationMs = 0L,
                 normalSpeedEffectDurationMs = SLIDESHOW_ITEM_DURATION_MS,
-                volume = 1F
+                volume = 1F,
+                remoteUri = null
             )
 
             val params = ExportTaskParams(

@@ -145,11 +145,11 @@ class PlaybackViewModel(
     }
 
     fun rewind() {
-        videoPlayer.seekTo(0)
+        videoPlayer.seekTo(0, false)
     }
 
     fun seekTo(position: Int) {
-        videoPlayer.seekTo(position)
+        videoPlayer.seekTo(position, false)
     }
 
     fun seekForward() {
@@ -195,7 +195,8 @@ class PlaybackViewModel(
                 volume = 1f,
                 playUri = uri,
                 equalizerEffect = null,
-                fadeEffect = FadeEffect.EMPTY
+                fadeEffect = FadeEffect.EMPTY,
+                remoteUri = null
             )
             // Video Player supports playing multiple music track.
             // In this sample single music track is added for simplicity

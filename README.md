@@ -26,7 +26,7 @@ For questions about Video Editor or Photo Editor SDK, reach out to Banuba suppor
 - [Photo Editor SDK](https://www.banuba.com/support)
 
 ## Requirements
-- Java 1.8+
+- Java 17+
 - Kotlin 2.2+
 - Android Studio 4+
 - OpenGL ES 3.0 (3.1 for Neural networks on GPU)

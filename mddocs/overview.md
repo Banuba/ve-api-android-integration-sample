@@ -1,10 +1,10 @@
-# API Overview
+# Overview
 
-- [Understand core concepts](#Understand-core-concepts)
-- [Dependencies](#Dependencies)
-- [Setup API](#Setup-API)
+- [Core Concepts](#Core-concepts)
+- [Installation](#Installation)
+- [Launch](#Launch)
 
-## Core concepts
+## Core Concepts
 The Video Editor API consists of two primary modules:
 - ```Playback API```
 - ```Export API```
@@ -18,7 +18,6 @@ The [`VideoPlayer`](playback/ve-playback-sdk/com.banuba.sdk.playback/-video-play
 1. **Playlist Management** - Add video sources for playback
 2. **Playback Control** - Play, pause, seek, and volume adjustment
 3. **Effects Management** - Apply and control video effects
-4. **Event Handling** - Monitor playback state and errors
 
 #### Common Use Cases
 
@@ -79,26 +78,41 @@ dependencyResolutionManagement {
 }
 ```
 
-Next, add a list of API dependencies in [app/build.gradle](app/build.gradle#L47) file.
+Add ```packagingOptions``` to your app's [gradle](../app/build.gradle#L35-L42)
+```groovy
+android {
+...
+   packagingOptions {
+       pickFirst '**/*.so'
+
+      jniLibs {
+         useLegacyPackaging = true
+      }
+   }
+...
+}
+```
+
+Add dependencies to your app's [gradle](../app/build.gradle#L55)
 
 ```groovy
   def banubaSdkVersion = '1.49.5'
-  implementation "com.banuba.sdk:ffmpeg:5.1.3"
-  implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
+  implementation "com.banuba.sdk:ffmpeg:5.3.0"
   implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-playback-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-export-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-effects-sdk:${banubaSdkVersion}"
-  
+
   // Only if you use Banuba Face AR
-  implementation 'com.banuba.sdk:effect-player:1.5.3.1'
+  implementation "com.banuba.sdk:effect-player-adapter:${banubaSdkVersion}"
+
 ```
 
-Custom behavior of Video Editor API is implemented by using dependency injection framework [Koin](https://insert-koin.io/).
+## Koin Module Setup
+1. Create [VideoEditorModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt) to initialize and customize the Video Editor SDK.
+2. Inside it, add [SampleModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L53) with your customizations:
 
-Next, create new class [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt) 
-for implementing Video Editor API and add all required API modules.
 ```kotlin
    class VideoEditorApiModule {
     fun initialize(application: Application) {
@@ -110,39 +124,35 @@ for implementing Video Editor API and add all required API modules.
                 VeSdkKoinModule().module,
                 VeExportKoinModule().module,
                 VePlaybackSdkKoinModule().module,
-                TokenStorageKoinModule().module,
                 // Module is required for applying Face AR masks
                 BanubaEffectPlayerKoinModule().module,
-                SampleModule().module // 
+                SampleModule().module
             )
         }
     }
 }
-```
 
-Create new class [SampleModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L55) to provide 
-custom implementation for API in module variable.
-
-```diff
 private class SampleModule {
 
-+    val module = module {
+    val module = module {
         ...
     }
 }
 ```
 
-Finally, initialize ```VideoEditorApiModule``` in your [Application](../app/src/main/java/com/banuba/example/videoeditor/SampleApp.kt#L23) class.
-```BanubaVideoEditor``` is a core class of API and SDK for initializing the product with the license token.
-Instance ```videoEditor``` is ```null``` when the license token is incorrect i.e. empty, truncated.
+### Launch
+
+Initialize `VideoEditorApiModule` in your [Application](../app/src/main/java/com/banuba/example/videoeditor/SampleApp.kt#L23) class. 
+The `BanubaVideoEditor` is the core class responsible for initializing the product with your license token.
+
 ```kotlin
 class SampleApp : Application() {
- override fun onCreate() {
+    override fun onCreate() {
         super.onCreate()
 
         val videoEditor = BanubaVideoEditor.initialize(LICENSE_TOKEN)
         if (videoEditor == null) {
-            // Token is not correct. Please check the license token
+            // Token is invalid. Verify your license token
         } else {
             // Initialize API modules
             VideoEditorApiModule().initialize(this@SampleApp)
@@ -151,26 +161,23 @@ class SampleApp : Application() {
 }
 ```
 
-### Check license state
-It is highly recommended to check your license state before using API functionalities.  
-Use ```BanubaVideoEditor.getLicenseState``` method for checking the license state in your Activity or Fragment.
-```kotlin
-videoEditor.getLicenseState { isValid ->
-   if (isValid) {
-      // ✅ License is active, all good
-   } else {
-      // ❌ Use of Video Editor is restricted. License is revoked or expired.
-   }
-}
-```
+:exclamation: Important
+1. Returns ```null```l if the license token is invalid – verify your token
+2. [Check license activation](../app/src/main/java/com/banuba/example/videoeditor/SampleActivity.kt#L48) before starting the editor.
 
 ## Dependencies
 - [Koin](https://insert-koin.io/)
 - [ExoPlayer](https://github.com/google/ExoPlayer)
 - [Kotlin Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
 - [AndroidX](https://developer.android.com/jetpack/androidx) libraries
-- [See all](all_dependencies.md)
 
-## What is next?
-We highly recommend to learn [Playback API quickstart](quickstart_playback.md) and [Export API quickstart](quickstart_export.md) guides to 
-streamline your integration process.
+## Next Steps
+
+Get started with our comprehensive integration guides:
+
+| Guide | Description |
+|-------|-------------|
+| [Playback API Quickstart](quickstart_playback.md) | Learn to implement video playback, trimming, and effects preview |
+| [Export API Quickstart](quickstart_export.md) | Master video rendering and output generation |
+
+These guides provide step-by-step instructions to accelerate your integration.

@@ -27,7 +27,7 @@ object SampleEffectsProvider {
         context: Context,
         fxName: String
     ): VisualTimedEffect {
-        val availableList = VideoEffectsHelper.takeAvailableFxEffects(context)
+        val availableList = VideoEffectsHelper.provideVisualEffects(context)
         val vhsDrawable = availableList.find {
             context.getString(it.nameRes) == fxName
         }?.provide() ?: throw Exception("VHS video effect is not available!")
@@ -206,7 +206,8 @@ object SampleEffectsProvider {
         override val volume: Float,
         override val playUri: Uri,
         override val equalizerEffect: EqualizerEffect?,
-        override val fadeEffect: FadeEffect = FadeEffect.EMPTY
+        override val fadeEffect: FadeEffect = FadeEffect.EMPTY,
+        override val remoteUri: Uri?
     ) : MusicEffect
 }
 

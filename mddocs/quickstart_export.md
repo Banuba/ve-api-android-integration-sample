@@ -1,4 +1,4 @@
-# Quickstart Export API
+# Export API Quickstart
 
 - [Overview](#Overview)
 - [Prepare export flow](#Prepare-export-flow)
@@ -7,45 +7,41 @@
 - [Manage export execution](#Manage-export-execution)
 - [Handle export result](#Handle-export-result)
 - [Create slideshow](#Create-slideshow)
-- [FAQ](#FAQ)
 
 ## Overview
-This guide is aimed to help you quickly to integrate Export API into your project.
-You will learn how to export a number of media files i.e. video, audio, gif with various effects and in various resolutions.  
+This guide helps you quickly integrate the Export API into your project. You'll learn to export media files (video, audio, GIF) with various effects and resolutions.
 
-Export API produces video as ```.mp4``` file.
+Export API produces video as `.mp4` files.
 
-:exclamation: Important  
-Export is a very heavy CPU and GPU intensive computational task.
-Execution time depends on
-1. Video duration - the longer video the longer execution time.
-2. Number of video and audio sources - the more sources the longer execution time.
-3. Number of effects and their usage in video - the more effects and their usage the longer execution time.
-4. Number of exported video - the more video and audio you want to export the longer execution time it takes.
-5. Device hardware - the most powerful devices can execute export much quicker.
+> **Important Performance Considerations**
+> Export is CPU/GPU intensive. Execution time depends on:
+> - Video duration
+> - Number of video/audio sources
+> - Number and complexity of effects
+> - Number of exported files
+> - Device hardware capabilities  
 
-Export supports 2 modes:
-- ```Foreground``` - the user has to wait on progress screen until processing is done.
-- ```Background``` - the user can be taken to your screens. A notification will be sent when processing is done.
 
-[ForegroundExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-foreground-export-flow-manager/index.md) and
-[BackgroundExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-background-export-flow-manager/index.md) are correspondent implementations.
+### Export Modes
 
-Visit [export guide](https://github.com/Banuba/ve-sdk-android-integration-sample/blob/main/mddocs/guide_export.md) to learn more 
-about export in Video Editor SDK.
+| Mode | Description |
+|------|-------------|
+| **Foreground** | User waits on progress screen until completion |
+| **Background** | User can navigate away; notification sent when done |
 
-### Prepare export flow
-You can use Export API to export a number of media files to meet all your requirements.   
+Corresponding implementations:
+- [`ForegroundExportFlowManager`](export/ve-export-sdk/com.banuba.sdk.export.data/-foreground-export-flow-manager/index.md)
+- [`BackgroundExportFlowManager`](export/ve-export-sdk/com.banuba.sdk.export.data/-background-export-flow-manager/index.md)  
+ [Detailed export guide](https://github.com/Banuba/ve-sdk-android-integration-sample/blob/main/mddocs/guide_export.md)
 
-Implement [ExportParamsProvider](export/ve-export-sdk/com.banuba.sdk.export.data/-export-params-provider/index.md) 
-and provide ```List<ExportParams>``` where every [ExportParams](export/ve-export-sdk/com.banuba.sdk.export.data/-export-params/index.md) is a media file i.e. video or audio 
-that will be produced in export.  
+---
 
-First, create new class ```CustomExportParamsProvider``` and implement [ExportParamsProvider](export/ve-export-sdk/com.banuba.sdk.export.data/-export-params-provider/index.md).
-Method ```provideExportParams``` returns ```List<ExportParams>``` which is a list of media content you want to export.
+## Prepare Export Flow
+### Implement ExportParamsProvider
 
-In this sample, an implementation that exports 1 video HD(720p) quality with watermark and some effects and 
-audio tracks that might not be empty.
+Create a class implementing [`ExportParamsProvider`](export/ve-export-sdk/com.banuba.sdk.export.data/-export-params-provider/index.md) to define what media files to export.
+
+**Example:** Export one HD video (720p) with watermark and effects:
 
 ```kotlin
 private class CustomExportParamsProvider(
@@ -83,7 +79,7 @@ private class CustomExportParamsProvider(
   }
 }
 ``` 
-where you set name to exported file,
+set file name,
 ```diff
 ExportParams.Builder(VideoResolution.Exact.HD) // Video Quality resolution
         .effects(effects.withWatermark(watermarkBuilder, WatermarkAlignment.BottomRight(marginRightPx = 16.toPx)))
@@ -146,48 +142,57 @@ Other properties
 - `extraAudioFile(extraAudioTrack: Uri)` - where to store extra audio file from video
 - `volumeVideo(volume: Float)` - set audio volume in video
 
-Next, specify this implementation in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L79)
+### Register in VideoEditorApiModule
+
+Add your provider in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L77)
 
 ```kotlin
 factory<ExportParamsProvider> {
-            CustomExportParamsProvider(
-                exportDir = get(named("exportDir")),
-                mediaFileNameHelper = get(),
-                watermarkBuilder = get()
-            )
-        }
-```
-
-Finally, use the most suitable export mode for your application - ```ForegroundExportFlowManager``` or ```BackgroundExportFlowManager``` in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L108).
-```kotlin
-        single<ExportFlowManager>(named("foregroundExportFlowManager")) {
-            ForegroundExportFlowManager(
-                exportDataProvider = get(),
-                sessionParamsProvider = get(),
-                exportSessionHelper = get(),
-                exportDir = get(named("exportDir")),
-                publishManager = get(),
-                errorParser = get(),
-                mediaFileNameHelper = get(),
-                exportBundleProvider = get()
-        )
+    CustomExportParamsProvider(
+        exportDir = get(named("exportDir")),
+        mediaFileNameHelper = get(),
+        watermarkBuilder = get()
+    )
 }
 ```
 
-Full implementation of [CustomExportParamsProvider](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L139) is available in the samp;e.
+### Configure Export Mode
+
+Choose and configure export mode in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L106).
+```kotlin
+// Foreground export
+single<ExportFlowManager>(named("foregroundExportFlowManager")) {
+    ForegroundExportFlowManager(
+        exportDataProvider = get(),
+        sessionParamsProvider = get(),
+        exportSessionHelper = get(),
+        exportDir = get(named("exportDir")),
+        publishManager = get(),
+        errorParser = get(),
+        mediaFileNameHelper = get(),
+        exportBundleProvider = get()
+    )
+}
+
+// Background export similarly with BackgroundExportFlowManager
+```
+
+📌 [Full CustomExportParamsProvider implementation](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L136)
 
 ## Prepare effects
-You have at least 2 options how to prepare video effects and audio tracks for export:
-1. The user adds video effects and audio tracks on the screens implemented using Playback API and next you pass these effects to export.
-2. You prepare video effects and audio tracks in isolation and pass it to export.
+Two approaches to prepare effects for export:
+1. **From Playback API** - User adds effects during editing; pass same effects to export
+2. **Isolated preparation** - Create effects programmatically without UI
 
-Please visit [Manage effects](quickstart_playback.md#Manage-effects) guide where we fully explained how to create effects for playback. 
-The same approach works for export as well.
+See [Manage effects](quickstart_playback.md#Manage-effects) guide for detailed effect creation.
 
-### Get export flow manager
-Instance of [ExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager/index.md) is created in [VideoEditorApiModule](../app/src/main/java/com/banuba/example/videoeditor/VideoEditorApiModule.kt#L108).
-You can access to this instance in 2 ways
-1. Using [Koin](https://insert-koin.io/) inject in Android Fragment or Activity classes.
+
+### Get Export Flow Manager
+
+Access [ExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager/index.md) instance:
+
+#### Option 1: Koin Injection in Activity/Fragment
+
 ``` diff
 + import org.koin.android.ext.android.inject
 
@@ -196,7 +201,8 @@ class SampleActivity : AppCompatActivity() {
  ...
 }
 ```
-2. In Android [ViewModel](../app/src/main/java/com/banuba/example/VideoEditorApiModule.kt#L59) using Koin .
+
+#### Option 2: Koin Injection in ViewModel
 ```diff
  viewModel {
    ExportViewModel(
@@ -205,19 +211,13 @@ class SampleActivity : AppCompatActivity() {
   }
 ```
 :exclamation: Important  
-Please keep im mind that if you use 2 instances of [ExportFlowManager](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager/index.md) 
-you should differ them by using Koin ```named``` function. For example, ```named("foregroundExportFlowManager")```.
+Use Koin's named qualifier when using multiple ExportFlowManager instances.
 
 ### Manage export execution
-[ForegroundExportFlowManager.startExport](export/ve-export-sdk/com.banuba.sdk.export.data/-foreground-export-flow-manager/start-export.md) and
-[BackgroundExportFlowManager.startExport](export/ve-export-sdk/com.banuba.sdk.export.data/-background-export-flow-manager/start-export.md) are methods
-you can use to start export execution. Each method requires instance of [ExportTaskParams](export/ve-export-sdk/com.banuba.sdk.export.data/-export-task-params)
-to start execution that describes a number of properties for produced media file.
 
-:bulb: Hint    
-you have ```List<Uri>``` video that stored on the device. Next step is to convert ```List<Uri>``` to
-```VideoRangeList``` where every ```Uri``` is converted to ```VideoRecordRange```.
-Instance of ```VideoRecordRange``` describes video source and its capabilities for the export i.e. speed, start and end positions of video to export etc.
+#### Start Export
+Convert video URIs to ExportTaskParams:
+
 ```kotlin
 fun startExport(
   context: Context,
@@ -268,21 +268,25 @@ fun prepareVideoRages(
   return VideoRangeList(videoRecords)
 }
 ```
-```DurationExtractor``` is used to get a duration of video file.  
 
-You can use [ForegroundExportFlowManager.stopExport](export/ve-export-sdk/com.banuba.sdk.export.data/-foreground-export-flow-manager/stop-export.md) and
-[BackgroundExportFlowManager.stopExport](export/ve-export-sdk/com.banuba.sdk.export.data/-background-export-flow-manager/stop-export.md) methods to stop export execution.
+#### Stop Export
+```kotlin
+// Foreground
+foregroundExportFlowManager.stopExport()
 
-## Handle export result
-[ExportResult](export/ve-export-sdk/com.banuba.sdk.export.data/-export-result/index.md) is main class that describes export result.
-[ExportFlowManager.resultData](export/ve-export-sdk/com.banuba.sdk.export.data/-export-flow-manager/result-data.md) is a handy wrapper 
-as ```LiveData<ExportResult>``` that you can use to observe export result in your Android lifecycle components.  
+// Background  
+backgroundExportFlowManager.stopExport()
+```
+
+#### Handle Export Result
+
+Observe export results using LiveData<ExportResult>:
 
 ```kotlin
 exportFlowmanager.resultData.observe(this, exportResultObserver)
 ```
 
-where ```exportResultObserver```
+Implement observer:
 ```kotlin
 val exportResultObserver = Observer<ExportResult> { exportResult ->
   when (exportResult) {
@@ -307,49 +311,38 @@ val exportResultObserver = Observer<ExportResult> { exportResult ->
   }
 }
 ```
-
-Full sample if available in [ExportActivity](../app/src/main/java/com/banuba/example/videoeditor/export/ExportActivity.kt#L35)
+📌 [Complete example in ExportActivity](../app/src/main/java/com/banuba/example/videoeditor/export/ExportActivity.kt#L35)
 
 ## Create slideshow
-Slideshow is a video made by a number of images with an animation. Animation can be disabled.
-To create a slideshow you need a list of images stored on the device.  
+Generate video from images (with optional animation).. 
 
 :exclamation: Important  
-Slideshow does not support adding audio tracks or other video effects.
+Slideshows don't support audio tracks or video effects.
 
-```SlideShowTask``` is a main class that is responsible for making slideshow video. ```SlideShowTask.makeVideo``` is
-the method to make and requires ```SlideShowTask.Params```. You can assign specific duration in milliseconds of image in slideshow video 
-by using ```SlideShowSource.File.durationMs``` property. Total duration of slideshow
-video is sum of ```SlideShowSource.File.durationMs```.
-
-In this sample, slideshow video with resolution FHD(1080p) is made by a list of images. Total duration will be a number of images multiply 3 seconds.
+### Basic Slideshow Creation
 ```kotlin
 val videoFHD = Size(1080, 1920)
 
 val sources = imageUriList.map { uri ->
-            SlideShowSource.File(
-                durationMs = 3_000L, // each image takes 3 seconds in video
-                source = uri
-            )
+    SlideShowSource.File(
+        durationMs = 3000L, // Each image: 3 seconds
+        source = uri
+    )
 }
 
 val params = SlideShowTask.Params.create(
-  context = context,
-  size = videoFHD,
-  destFile = ..., // File where to store video 
-  sources = sources
+    context = context,
+    size = videoFHD,
+    destFile = File(...), // Output location
+sources = sources
 )
-SlideShowTask.makeVideo(params)
+
+try {
+    SlideShowTask.makeVideo(params)
+    // Success - no exception thrown
+} catch (e: Exception) {
+    // Handle error
+}
 ```
 
-```SlideShowTask.makeVideo``` method does not return any result. The execution completes successfully if no ```Exception``` thrown. 
-
-Our [sample](../app/src/main/java/com/banuba/example/videoeditor/export/ExportViewModel.kt#L83) includes implementation of making slideshow video based on image from Android [assets](../app/src/main/assets) folder 
-for simplicity. You can use any image stored on the device.
-
-## FAQ
-
-#### 1. I want to create video from image with audio track and effects
-Slideshow does not support adding audio and effects on top. But you can use the following workaround
-   1. Create a slideshow video
-   2. Use created slideshow video as source and export new video with audio tracks and video effects.
+📌 [Sample implementation](../app/src/main/java/com/banuba/example/videoeditor/export/ExportViewModel.kt#L83)
