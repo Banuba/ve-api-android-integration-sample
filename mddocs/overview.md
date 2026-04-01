@@ -96,7 +96,7 @@ android {
 Add dependencies to your app's [gradle](../app/build.gradle#L55)
 
 ```groovy
-  def banubaSdkVersion = '1.50.0'
+  def banubaSdkVersion = '1.51.0'
   implementation "com.banuba.sdk:ffmpeg:5.3.0"
   implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
   implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
