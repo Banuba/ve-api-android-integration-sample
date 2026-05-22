@@ -2,11 +2,11 @@ package com.banuba.example.videoeditor
 
 import android.app.Application
 import android.util.Log
-import com.banuba.sdk.core.license.BanubaVideoEditor
+import com.banuba.sdk.core.license.EditorSdk
 
 class SampleApp : Application() {
 
-    var videoEditor: BanubaVideoEditor? = null
+    var videoEditor: EditorSdk? = null
 
     companion object {
         const val TAG = "BanubaVideoEditor"
@@ -20,7 +20,7 @@ class SampleApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        videoEditor = BanubaVideoEditor.initialize(LICENSE_TOKEN)
+        videoEditor = EditorSdk.initialize(LICENSE_TOKEN)
 
         if (videoEditor == null) {
             // Token you provided is not correct - empty or truncated
