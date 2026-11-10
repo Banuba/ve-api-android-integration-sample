@@ -52,9 +52,9 @@ class ExportViewModel(
 
     private var currentExportFlowManager: ExportFlowManager? = null
 
-    fun stopExport() {
+    fun stopExport(draftUuid: UUID = UUID.randomUUID()) {
         Log.d(ExportActivity.TAG, "Stop export = $currentExportFlowManager")
-        currentExportFlowManager?.stopExport(ExportStopReason.CANCEL)
+        currentExportFlowManager?.stopExport(draftUuid, ExportStopReason.CANCEL)
         currentExportFlowManager = null
     }
 
@@ -197,7 +197,7 @@ class ExportViewModel(
         }
 
         Log.d(ExportActivity.TAG, "Start export task = $params, flow = $currentExportFlowManager")
-        requireNotNull(currentExportFlowManager).startExport(params)
+        requireNotNull(currentExportFlowManager).startExport(UUID.randomUUID(), params)
     }
 
 
