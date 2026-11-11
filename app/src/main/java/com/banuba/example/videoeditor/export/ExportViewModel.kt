@@ -52,9 +52,9 @@ class ExportViewModel(
 
     private var currentExportFlowManager: ExportFlowManager? = null
 
-    fun stopExport(draftUuid: UUID = UUID.randomUUID()) {
+    fun stopExport() {
         Log.d(ExportActivity.TAG, "Stop export = $currentExportFlowManager")
-        currentExportFlowManager?.stopExport(draftUuid, ExportStopReason.CANCEL)
+        currentExportFlowManager?.stopExport(ExportStopReason.CANCEL)
         currentExportFlowManager = null
     }
 
@@ -72,7 +72,8 @@ class ExportViewModel(
             musicEffects = emptyList(),
             videoVolume = 1F,
             coverFrameSize = coverFrameSize,
-            aspect = aspectRatioProvider.provide()        //by default provided aspect ratio = 9.0 / 16
+            aspect = aspectRatioProvider.provide(),        //by default provided aspect ratio = 9.0 / 16
+            draftUuid = ParcelUuid(UUID.randomUUID())
         )
 
         startExportInternal(params, inForeground)
@@ -155,7 +156,8 @@ class ExportViewModel(
                 musicEffects = listOf(musicEffect),
                 videoVolume = 1F,
                 coverFrameSize = videoFHD,
-                aspect = aspectRatioProvider.provide()   //by default provided aspect ratio = 9.0 / 16
+                aspect = aspectRatioProvider.provide(),   //by default provided aspect ratio = 9.0 / 16
+                draftUuid = ParcelUuid(UUID.randomUUID())
             )
 
             startExportInternal(params, inForeground)
@@ -197,7 +199,7 @@ class ExportViewModel(
         }
 
         Log.d(ExportActivity.TAG, "Start export task = $params, flow = $currentExportFlowManager")
-        requireNotNull(currentExportFlowManager).startExport(UUID.randomUUID(), params)
+        requireNotNull(currentExportFlowManager).startExport(params)
     }
 
 

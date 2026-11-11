@@ -12,8 +12,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.banuba.example.videoeditor.SampleEffectsProvider
 import com.banuba.example.videoeditor.utils.BanubaEffectHelper
+import com.banuba.sdk.core.Rotation
 import com.banuba.sdk.core.data.MediaDataGalleryValidator
 import com.banuba.sdk.core.data.MediaValidationResultType
+import com.banuba.sdk.core.domain.VideoSourceType
 import com.banuba.sdk.core.effects.DrawType
 import com.banuba.sdk.core.effects.FadeEffect
 import com.banuba.sdk.core.gl.GlViewport
@@ -22,11 +24,11 @@ import com.banuba.sdk.effects.ve.VideoEffectsHelper
 import com.banuba.sdk.playback.PlaybackError
 import com.banuba.sdk.playback.PlayerScaleType
 import com.banuba.sdk.playback.VideoPlayer
+import com.banuba.sdk.ve.domain.VideoRecordRange
 import com.banuba.sdk.ve.effects.Effects
 import com.banuba.sdk.ve.effects.TypedTimedEffect
 import com.banuba.sdk.ve.effects.VisualTimedEffect
 import com.banuba.sdk.ve.ext.DurationHelper
-import com.banuba.sdk.ve.ext.VideoEditorUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -97,10 +99,16 @@ class PlaybackViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val videoPlaylist = videoContent
                 .filter { videoValidator.getValidationResult(it) == MediaValidationResultType.VALID_FILE }
-                .mapNotNull {
-                    VideoEditorUtils.createVideoRecordRange(
-                        sourceUri = it,
-                        context = context,
+                .mapNotNull { fileUri ->
+                    val videoDuration = DurationExtractor().extractDurationMilliSec(context, fileUri)
+                    VideoRecordRange(
+                        sourceUri = fileUri,
+                        durationMs = videoDuration,
+                        speed = 1f,
+                        playFromMs = 0,
+                        playToMs = videoDuration,
+                        rotation = Rotation.ROTATION_0,
+                        type = VideoSourceType.GALLERY,
                         pipApplied = false,
                         containsAudio = true
                     )
@@ -108,7 +116,7 @@ class PlaybackViewModel(
 
             // Calculate total video duration in milliseconds
             val totalVideoDurationMs = durationHelper.run {
-                setVideoRanges(videoPlaylist)
+                setVideoRanges(videoPlaylist, true)
                 this.totalDuration
             }
 
@@ -123,7 +131,7 @@ class PlaybackViewModel(
      * Prepares video player for playing video content.
      */
     fun preparePlayer(surfaceHolder: SurfaceHolder) {
-        if (videoPlayer.prepare(Size(1920, 1080))) {
+        if (videoPlayer.prepare(Size(1920, 1080), true)) {
             with(videoPlayer) {
                 setSurfaceHolder(surfaceHolder)
                 setCallback(videoPlayerCallback)
