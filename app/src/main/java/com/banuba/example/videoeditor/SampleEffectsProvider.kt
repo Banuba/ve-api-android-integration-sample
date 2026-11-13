@@ -66,7 +66,8 @@ object SampleEffectsProvider {
             startTimeBundle = TimeBundle(0, 0),
             startTotal = 0,
             endTimeBundle = TimeBundle(0, videoMid),
-            endTotal = videoMid
+            endTotal = videoMid,
+            videoUuid = ParcelUuid(UUID.randomUUID())
         )
     }
 
@@ -79,7 +80,8 @@ object SampleEffectsProvider {
             startTimeBundle = TimeBundle(0, videoMid),
             startTotal = videoMid,
             endTimeBundle = TimeBundle(0, videoDuration.toInt()),
-            endTotal = videoDuration.toInt()
+            endTotal = videoDuration.toInt(),
+            videoUuid = ParcelUuid(UUID.randomUUID())
         )
     }
 

@@ -72,7 +72,8 @@ class ExportViewModel(
             musicEffects = emptyList(),
             videoVolume = 1F,
             coverFrameSize = coverFrameSize,
-            aspect = aspectRatioProvider.provide()        //by default provided aspect ratio = 9.0 / 16
+            aspect = aspectRatioProvider.provide(),        //by default provided aspect ratio = 9.0 / 16
+            draftUuid = ParcelUuid(UUID.randomUUID())
         )
 
         startExportInternal(params, inForeground)
@@ -155,7 +156,8 @@ class ExportViewModel(
                 musicEffects = listOf(musicEffect),
                 videoVolume = 1F,
                 coverFrameSize = videoFHD,
-                aspect = aspectRatioProvider.provide()   //by default provided aspect ratio = 9.0 / 16
+                aspect = aspectRatioProvider.provide(),   //by default provided aspect ratio = 9.0 / 16
+                draftUuid = ParcelUuid(UUID.randomUUID())
             )
 
             startExportInternal(params, inForeground)
